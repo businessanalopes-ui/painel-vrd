@@ -882,15 +882,15 @@ function metaChips(tk,showOwner){
 const TABS=[
   {id:'hoje',  label:'Meu dia', short:'Dia', icon:'<path d="M3 12 12 4l9 8"/><path d="M5 10v10h14V10"/>'},
   {id:'tarefas',label:'Tarefas equipe', short:'Equipe', icon:'<rect x="3" y="4" width="5" height="16" rx="1"/><rect x="10" y="4" width="5" height="11" rx="1"/><rect x="17" y="4" width="4" height="16" rx="1"/>'},
+  {id:'hubvrd',label:'Hub VRD', short:'Hub', icon:'<rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="5" rx="1.5"/><rect x="13" y="10" width="8" height="11" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/>', allow:['simoni','ana','mudrek','fernanda']},
   {id:'vendas',label:'Vendas',icon:'<path d="M4 5h16l-6 7v5l-4 2v-7z"/>', allow:['ana','simoni','nati','fernanda','mudrek']},
   {id:'posvenda',label:'Pós-venda', short:'Pós', icon:'<circle cx="9" cy="8" r="3.5"/><path d="M3.5 20c0-3 2.5-5.5 5.5-5.5"/><path d="M14.5 13.5l2 2 4-4"/>', allow:['ana','simoni','nati','fernanda','mudrek']},
-  {id:'amazon',label:'Projeto Amazon', short:'Amazon', icon:'<path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8.5"/>', allow:['simoni','carol','mayara']},
   {id:'depoimentos',label:'Depoimentos', short:'Vídeos', icon:'<rect x="2.5" y="6" width="13" height="12" rx="2"/><path d="M16 10l5-3v10l-5-3z"/>', allow:['carol','ana','simoni']},
-  {id:'hubvrd',label:'Hub VRD', short:'Hub', icon:'<rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="5" rx="1.5"/><rect x="13" y="10" width="8" height="11" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/>', allow:['simoni','ana','mudrek','fernanda']},
-  {id:'admin',label:'Admin', short:'Admin', icon:'<path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/>', allow:['ana','simoni']},
-  {id:'financeiro',label:'Financeiro', short:'Financ.', icon:'<path d="M12 3v18"/><path d="M16 7.5C16 5.6 14.2 4.5 12 4.5S8 5.6 8 7.5s1.8 3 4 3 4 1.1 4 3-1.8 3-4 3-4-1.1-4-3"/>', allow:['simoni']},
+  {id:'amazon',label:'Projeto Amazon', short:'Amazon', icon:'<path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8.5"/>', allow:['simoni','carol','mayara']},
   {id:'pessoal',label:'Pessoal', short:'Pessoal', icon:'<path d="M12 21C7.5 17.5 4 14 4 9.8 4 7.1 6 5 8.6 5c1.6 0 3 .9 3.4 2.2C12.4 5.9 13.8 5 15.4 5 18 5 20 7.1 20 9.8c0 4.2-3.5 7.7-8 11.2z"/>', allow:['simoni']},
+  {id:'financeiro',label:'Financeiro', short:'Financ.', icon:'<path d="M12 3v18"/><path d="M16 7.5C16 5.6 14.2 4.5 12 4.5S8 5.6 8 7.5s1.8 3 4 3 4 1.1 4 3-1.8 3-4 3-4-1.1-4-3"/>', allow:['simoni']},
   {id:'guia',  label:'Guia',  icon:'<path d="M4 19V5a2 2 0 0 1 2-2h11v18H6a2 2 0 0 1-2-2z"/><path d="M17 3v18"/>'},
+  {id:'admin',label:'Admin', short:'Admin', icon:'<path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/>', allow:['ana','simoni']},
 ];
 function isVRDTask(x){return !x.proj||x.proj==='vrd'}
 function canSeePessoal(uid){return uid==='simoni'||S.tasks.some(t=>t.proj==='pessoal'&&t.owner===uid)}
