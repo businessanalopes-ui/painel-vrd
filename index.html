@@ -187,7 +187,7 @@
   .gen li:before{content:"›";position:absolute;left:6px;top:7px;color:var(--gold);font-weight:900;font-size:16px}
   .access{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px}
   .access span{font-size:12px;font-weight:600;background:var(--card-2);border:1px solid var(--line);border-radius:8px;padding:6px 10px;color:var(--soft)}
-  .note{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:12px;padding:11px 13px;font-size:12.5px;color:#E0C892;line-height:1.5;margin-top:4px}
+  .note{background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:12px;padding:11px 13px;font-size:12.5px;color:#E0C892;line-height:1.5;margin-top:12px;margin-bottom:4px}
   .note b{font-weight:800;color:var(--gold-2)}
   .ghost{width:100%;border:1px dashed var(--line);background:transparent;border-radius:11px;padding:12px;
     font-weight:700;font-size:12.5px;color:var(--soft);cursor:pointer;margin-top:8px}
@@ -303,6 +303,56 @@
   .finb{flex:1;min-width:0}
   .fintitle{font-weight:700;font-size:14px;color:var(--ink);margin-bottom:7px}
   .finval{flex:none;font-weight:800;font-size:14.5px;white-space:nowrap}
+  .finright{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex:none}
+  /* financeiro rico */
+  .fcard{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:14px;max-width:860px}
+  .fcard-h{display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:13.5px;color:var(--ink);margin-bottom:11px}
+  .fmeta-edit{background:none;border:1px solid var(--line);color:var(--gold-2);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer}
+  .fmeta-edit:hover{border-color:var(--gold-line)}
+  .fbar{flex:1;height:12px;background:#1A1A1F;border-radius:99px;overflow:hidden}
+  .fbar i{display:block;height:100%;border-radius:99px}
+  .fbar-row{display:flex;align-items:center;gap:12px}
+  .fbar-v{flex:none;font-weight:800;font-size:13px;color:var(--ink)}
+  .fbar-v span{color:var(--soft);font-weight:600}
+  .fmeta-pct{font-size:11.5px;color:var(--soft);margin-top:8px}
+  .fcatwrap,.fmonwrap{display:flex;flex-direction:column;gap:10px;margin-bottom:6px;max-width:860px}
+  .fcatrow{display:flex;align-items:center;gap:10px}
+  .fcatrow .fcn{width:104px;flex:none;font-size:12.5px;font-weight:600;color:var(--ink)}
+  .fcatrow .fcv{width:140px;flex:none;text-align:right;font-size:12px;color:var(--soft)}
+  .fcatrow .fcv span{color:var(--faint);margin-left:4px}
+  .fmonrow{display:flex;align-items:center;gap:12px}
+  .fmonrow .fmn{width:54px;flex:none;font-size:12px;font-weight:700;color:var(--soft)}
+  .fmbars{flex:1;display:flex;flex-direction:column;gap:5px;min-width:0}
+  .fmb{display:flex;align-items:center;gap:9px}
+  .fmb .fmtrack{flex:1;height:9px;background:#1A1A1F;border-radius:99px;overflow:hidden;min-width:0}
+  .fmb .fmtrack i{display:block;height:100%;border-radius:99px;min-width:2px}
+  .fmb span{flex:none;width:96px;text-align:right;font-size:11px;color:var(--soft)}
+  .flegend{display:flex;gap:18px;margin:4px 2px 14px;font-size:11.5px;color:var(--soft)}
+  .flegend .lg{display:flex;align-items:center;gap:6px}
+  .flegend .lg i{width:10px;height:10px;border-radius:3px;display:inline-block}
+  /* biblioteca de aulas (Depoimentos) */
+  .aula{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:10px;cursor:pointer;box-shadow:var(--shadow);max-width:860px}
+  .aula:hover{border-color:var(--gold-line)}
+  .aula-h{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+  .aula-n{font-weight:800;font-size:15px;color:var(--ink)}
+  .aula-d{font-size:12px;color:var(--soft);margin-top:2px}
+  .aula-rec{flex:none;background:var(--gold-soft);color:var(--gold-2);border:1px solid var(--gold-line);border-radius:9px;padding:6px 11px;font-size:12px;font-weight:700;text-decoration:none}
+  .aula-docs{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+  .aula-doc{background:#0F0F12;border:1px solid var(--line);border-radius:8px;padding:5px 9px;font-size:11.5px;color:var(--soft);text-decoration:none}
+  .aula-doc:hover{color:var(--gold-2);border-color:var(--gold-line)}
+  .aula-csec{font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin:13px 0 7px}
+  .aula-cortes{display:flex;flex-direction:column;gap:5px}
+  .aula-corte{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink)}
+  .aula-corte .cdot{width:7px;height:7px;border-radius:50%;flex:none}
+  .aula-corte .ct{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .aula-corte .cst{font-size:11px;font-weight:700;flex:none;text-transform:capitalize}
+  .aula-corte .clink{flex:none;font-size:11px;color:var(--gold-2);text-decoration:none;font-weight:700}
+  .aula-empty{font-size:12px;color:var(--faint)}
+  .corte{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:7px}
+  .corte .corte-n{flex:1 1 100%;border:1px solid var(--line);background:#0F0F12;border-radius:9px;padding:8px 10px;font-size:13px;color:var(--ink);font-family:inherit}
+  .corte .corte-n:focus,.corte .corte-u:focus{outline:none;border-color:var(--gold-line)}
+  .corte .corte-st{flex:none;border:1px solid;border-radius:999px;padding:5px 11px;font-size:11.5px;font-weight:800;cursor:pointer;text-transform:capitalize}
+  .corte .corte-u{flex:1;min-width:90px;border:1px solid var(--line);background:#0F0F12;border-radius:9px;padding:7px 9px;font-size:12px;color:var(--ink);font-family:inherit}
   .seg{display:flex;flex-wrap:wrap;gap:7px}
   .seg button{border:1px solid var(--line);background:#0F0F12;border-radius:999px;padding:8px 13px;font-weight:700;font-size:12.5px;
     color:var(--soft);cursor:pointer}
@@ -327,6 +377,13 @@
   .vtoggle{display:inline-flex;background:var(--card);border:1px solid var(--line);border-radius:11px;padding:3px;margin-bottom:14px}
   .vtoggle button{border:none;background:none;color:var(--soft);font-weight:700;font-size:12.5px;padding:7px 14px;border-radius:8px;cursor:pointer}
   .vtoggle button.on{background:var(--gold);color:#1A1606}
+  /* linha de controle com rótulo */
+  .ctrlrow{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px}
+  .ctrllabel{font-size:10px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--faint);flex:none;width:52px;padding-top:11px}
+  .ctrlrow .filterrow{flex:1;min-width:0;padding-bottom:0;margin:0}
+  .ctrlrow .subtabs{flex:1;min-width:0;margin:0;padding-bottom:0}
+  .ctrlrow .vtoggle{margin-bottom:0}
+  .chips-sm .subtab{padding:6px 12px;font-size:12px}
   /* sub-tabs */
   .subtabs{display:flex;gap:7px;overflow-x:auto;margin:0 -2px 16px;padding:2px}
   .subtabs::-webkit-scrollbar{display:none}
@@ -648,6 +705,15 @@ function seed(){
     t('Subir os vídeos da Simoni e gerar links de produto','mayara',todayISO(),'rotina',{recur:true,proj:'amazon'}),
     t('Checar novas campanhas de cada marca (mensal)','mayara',addDays(5),'rotina',{recur:true,proj:'amazon'}),
     t('Fazer os contatos do projeto Amazon','carol',todayISO(),'rotina',{recur:true,proj:'amazon'}),
+    // Pessoal da Simoni (proj 'pessoal' — só na aba Pessoal; cada um vê só o que a Simoni designar)
+    t('Agendar consulta médica da Simoni','carol',addDays(2),'rotina',{proj:'pessoal'}),
+    t('Comprar presente de aniversário (ver lista)','carol',addDays(4),'rotina',{proj:'pessoal'}),
+    t('Organizar a agenda pessoal da semana','mayara',addDays(1),'rotina',{proj:'pessoal'}),
+    t('Bloquear 1 dia/mês pra gravar conteúdo em lote','simoni',addDays(3),'rotina',{proj:'pessoal'}),
+    // Depoimentos (função exclusiva da Carol — recorte/montagem das reuniões ao vivo)
+    t('Depoimento da Andreza — reunião 03/06','carol',addDays(1),'conteudo',{proj:'depoimentos',prio:'media',campos:[{n:'Aluno',v:'Andreza Lemos'},{n:'Reunião',v:'03/06 ao vivo'},{n:'Duração final',v:'~45s'}],links:[{name:'Gravação bruta (Drive)',url:'https://drive.google.com/'}],subs:[{t:'Achar o trecho na gravação',done:true},{t:'Recortar e montar',done:false},{t:'Legendar',done:false},{t:'Enviar pra Simoni aprovar',done:false}]}),
+    t('Depoimento do Diógenes — reunião 03/06','carol',addDays(2),'conteudo',{proj:'depoimentos',status:'doing',campos:[{n:'Aluno',v:'Diógenes Moura'},{n:'Reunião',v:'03/06 ao vivo'}],links:[{name:'Gravação bruta (Drive)',url:'https://drive.google.com/'}]}),
+    t('Depoimento da Fernanda T. — reunião 27/05','carol',addDays(-1),'conteudo',{proj:'depoimentos',status:'revisao',review:true,reviewSince:addDays(-1),entrega:'https://drive.google.com/'}),
     // dependências (a pessoa marca de quem depende → aparece no "Dia" do outro)
     t('Montar a página do lançamento (preciso da copy)','ana',todayISO(),'lancamento',{dep:'simoni'}),
     t('Postar os carrosséis da semana (preciso das artes)','mayara',todayISO(),'conteudo',{dep:'carol'}),
@@ -737,17 +803,38 @@ function seedCofre(){
 
 let S=load();
 function money(n){return 'R$ '+Number(n||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}
-function seedFinanceiro(){if(PUBLISHED)return {lancamentos:[],notas:''};return {
+function seedFinanceiro(){if(PUBLISHED)return {lancamentos:[],notas:'',meta:0};return {
+  meta:14000,
   lancamentos:[
-    {id:'f1',desc:'Vendas VRD — Stripe/Hotmart (mês)',tipo:'entrada',valor:9408.92,venc:todayISO(),status:'pago',cat:'Receita'},
-    {id:'f2',desc:'Renovações / anuidades',tipo:'entrada',valor:1980,venc:todayISO(),status:'pago',cat:'Receita'},
-    {id:'f3',desc:'Verba de tráfego (Meta Ads)',tipo:'saida',valor:3000,venc:addDays(3),status:'pendente',cat:'Tráfego'},
-    {id:'f4',desc:'Pagamentos do time',tipo:'saida',valor:4200,venc:addDays(5),status:'pendente',cat:'Equipe'},
-    {id:'f5',desc:'Ferramentas (ManyChat, Curseduca, Stripe)',tipo:'saida',valor:680,venc:addDays(8),status:'pendente',cat:'Ferramentas'},
-    {id:'f6',desc:'Pró-labore Simoni',tipo:'saida',valor:5000,venc:addDays(10),status:'pendente',cat:'Pró-labore'},
+    {id:'f1',desc:'Vendas VRD — Stripe/Hotmart',tipo:'entrada',valor:9408.92,venc:todayISO(),status:'pago',cat:'Vendas'},
+    {id:'f2',desc:'Renovações / anuidades',tipo:'entrada',valor:1980,venc:todayISO(),status:'pago',cat:'Renovação'},
+    {id:'f3',desc:'Consultoria individual',tipo:'entrada',valor:2500,venc:addDays(4),status:'pendente',cat:'Consultoria'},
+    {id:'f4',desc:'Verba de tráfego (Meta Ads)',tipo:'saida',valor:3000,venc:addDays(3),status:'pendente',cat:'Tráfego'},
+    {id:'f5',desc:'Pagamentos do time',tipo:'saida',valor:4200,venc:addDays(5),status:'pendente',cat:'Equipe'},
+    {id:'f6',desc:'Ferramentas (ManyChat, Cademí, Stripe...)',tipo:'saida',valor:680,venc:addDays(8),status:'pendente',cat:'Ferramentas'},
+    {id:'f7',desc:'Pró-labore Simoni',tipo:'saida',valor:5000,venc:addDays(10),status:'pendente',cat:'Pró-labore'},
+    {id:'f8',desc:'Impostos',tipo:'saida',valor:1400,venc:addDays(12),status:'pendente',cat:'Impostos'},
+    {id:'f9',desc:'Vendas VRD (mês passado)',tipo:'entrada',valor:11200,venc:addDays(-32),status:'pago',cat:'Vendas'},
+    {id:'f10',desc:'Tráfego (mês passado)',tipo:'saida',valor:3200,venc:addDays(-31),status:'pago',cat:'Tráfego'},
+    {id:'f11',desc:'Time (mês passado)',tipo:'saida',valor:4200,venc:addDays(-30),status:'pago',cat:'Equipe'},
+    {id:'f12',desc:'Ferramentas (mês passado)',tipo:'saida',valor:650,venc:addDays(-30),status:'pago',cat:'Ferramentas'},
+    {id:'f13',desc:'Vendas VRD (2 meses atrás)',tipo:'entrada',valor:8600,venc:addDays(-62),status:'pago',cat:'Vendas'},
+    {id:'f14',desc:'Custos do time (2 meses atrás)',tipo:'saida',valor:6800,venc:addDays(-60),status:'pago',cat:'Equipe'},
   ],
   notas:'Espaço privado da Simoni. Lance aqui o que entra e o que sai do negócio. Só você vê. 🔒'
 };}
+function seedAulas(){if(PUBLISHED)return [];return [
+  {id:'a1',nome:'Reunião ao vivo · 03/06',data:'2026-06-03',gravacao:'https://drive.google.com/',
+   docs:[{name:'Roteiro da reunião',url:'https://drive.google.com/'},{name:'Lista de presença',url:'https://drive.google.com/'}],
+   cortes:[
+     {t:'Depoimento da Andreza',status:'editando',url:''},
+     {t:'Depoimento do Diógenes',status:'a fazer',url:''},
+     {t:'Dica rápida da Simoni (corte pra reels)',status:'a fazer',url:''},
+   ]},
+  {id:'a2',nome:'Reunião ao vivo · 27/05',data:'2026-05-27',gravacao:'https://drive.google.com/',
+   docs:[],
+   cortes:[{t:'Depoimento da Fernanda T.',status:'pronto',url:'https://drive.google.com/'}]},
+];}
 function seedPessoal(){if(PUBLISHED)return {notas:'',items:[]};return {
   notas:'Seu espaço só seu, Simoni 🌿 — anotações, ideias e lembretes que não são do time.',
   items:[
@@ -757,8 +844,8 @@ function seedPessoal(){if(PUBLISHED)return {notas:'',items:[]};return {
   ]
 };}
 function load(){
-  try{const r=JSON.parse(localStorage.getItem(KEY));if(r&&r.tasks){if(!r.financeiro)r.financeiro=seedFinanceiro();if(!r.pessoal)r.pessoal=seedPessoal();if(!r.stages)r.stages=seedStages();return r}}catch(e){}
-  return {current:'simoni',tab:'hoje',filter:'all',catFilter:'all',lateOnly:false,tarefasMode:'cal',vendaSub:'geral',hubTab:'metricas',hubSub:'resumo',adminSub:'conexoes',calRef:todayISO().slice(0,7),tasks:seed(),checkins:[],leads:seedLeads(),launch:seedLaunch(),cofre:seedCofre(),financeiro:seedFinanceiro(),pessoal:seedPessoal(),stages:seedStages()};
+  try{const r=JSON.parse(localStorage.getItem(KEY));if(r&&r.tasks){if(!r.financeiro)r.financeiro=seedFinanceiro();if(!r.pessoal)r.pessoal=seedPessoal();if(!r.stages)r.stages=seedStages();if(!r.aulas)r.aulas=seedAulas();return r}}catch(e){}
+  return {current:'simoni',tab:'hoje',filter:'all',catFilter:'all',lateOnly:false,tarefasMode:'cal',vendaSub:'geral',hubTab:'metricas',hubSub:'resumo',adminSub:'conexoes',calRef:todayISO().slice(0,7),tasks:seed(),checkins:[],leads:seedLeads(),launch:seedLaunch(),cofre:seedCofre(),financeiro:seedFinanceiro(),pessoal:seedPessoal(),stages:seedStages(),aulas:seedAulas()};
 }
 function save(){localStorage.setItem(KEY,JSON.stringify(S))}
 
@@ -797,15 +884,19 @@ const TABS=[
   {id:'tarefas',label:'Tarefas equipe', short:'Equipe', icon:'<rect x="3" y="4" width="5" height="16" rx="1"/><rect x="10" y="4" width="5" height="11" rx="1"/><rect x="17" y="4" width="4" height="16" rx="1"/>'},
   {id:'vendas',label:'Vendas',icon:'<path d="M4 5h16l-6 7v5l-4 2v-7z"/>', allow:['ana','simoni','nati','fernanda','mudrek']},
   {id:'posvenda',label:'Pós-venda', short:'Pós', icon:'<circle cx="9" cy="8" r="3.5"/><path d="M3.5 20c0-3 2.5-5.5 5.5-5.5"/><path d="M14.5 13.5l2 2 4-4"/>', allow:['ana','simoni','nati','fernanda','mudrek']},
-  {id:'amazon',label:'Projeto Amazon', short:'Amazon', icon:'<path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8.5"/>', allow:['ana','simoni','carol','mayara']},
+  {id:'amazon',label:'Projeto Amazon', short:'Amazon', icon:'<path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8.5"/>', allow:['simoni','carol','mayara']},
+  {id:'depoimentos',label:'Depoimentos', short:'Vídeos', icon:'<rect x="2.5" y="6" width="13" height="12" rx="2"/><path d="M16 10l5-3v10l-5-3z"/>', allow:['carol','ana','simoni']},
   {id:'hubvrd',label:'Hub VRD', short:'Hub', icon:'<rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="5" rx="1.5"/><rect x="13" y="10" width="8" height="11" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/>', allow:['simoni','ana','mudrek','fernanda']},
   {id:'admin',label:'Admin', short:'Admin', icon:'<path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/>', allow:['ana','simoni']},
   {id:'financeiro',label:'Financeiro', short:'Financ.', icon:'<path d="M12 3v18"/><path d="M16 7.5C16 5.6 14.2 4.5 12 4.5S8 5.6 8 7.5s1.8 3 4 3 4 1.1 4 3-1.8 3-4 3-4-1.1-4-3"/>', allow:['simoni']},
   {id:'pessoal',label:'Pessoal', short:'Pessoal', icon:'<path d="M12 21C7.5 17.5 4 14 4 9.8 4 7.1 6 5 8.6 5c1.6 0 3 .9 3.4 2.2C12.4 5.9 13.8 5 15.4 5 18 5 20 7.1 20 9.8c0 4.2-3.5 7.7-8 11.2z"/>', allow:['simoni']},
   {id:'guia',  label:'Guia',  icon:'<path d="M4 19V5a2 2 0 0 1 2-2h11v18H6a2 2 0 0 1-2-2z"/><path d="M17 3v18"/>'},
 ];
+function isVRDTask(x){return !x.proj||x.proj==='vrd'}
+function canSeePessoal(uid){return uid==='simoni'||S.tasks.some(t=>t.proj==='pessoal'&&t.owner===uid)}
+function canSeeTab(tb,uid){if(tb.id==='pessoal')return canSeePessoal(uid);return !tb.allow||tb.allow.includes(uid)}
 function renderNav(){
-  const tabs=TABS.filter(tb=>!tb.allow||tb.allow.includes(S.current));
+  const tabs=TABS.filter(tb=>canSeeTab(tb,S.current));
   const tcount=S.tasks.filter(x=>x.owner===S.current&&x.status!=='done'&&dueLabel(x.due)&&(dueLabel(x.due).over||dueLabel(x.due).t==='hoje')).length;
   [['#nav'],['#sidenav']].forEach(([sel])=>{
     const n=$(sel);if(!n)return;n.innerHTML='';
@@ -835,17 +926,18 @@ function renderNav(){
 /* ============================ VIEWS ============================ */
 function render(){
   const tdef=TABS.find(t=>t.id===S.tab);
-  if(tdef&&tdef.allow&&!tdef.allow.includes(S.current))S.tab='hoje';
+  if(tdef&&!canSeeTab(tdef,S.current))S.tab='hoje';
   renderWho();renderNav();
   const v=$('#view');v.innerHTML='';v.dataset.view=S.tab;
   const fab=$('#fab');
   const vsub=S.vendaSub||'geral';
-  const showFab=S.tab==='tarefas'||S.tab==='amazon'||(S.tab==='vendas'&&['geral','pipeline'].includes(vsub));
+  const depoBib=S.tab==='depoimentos'&&(S.depoView||'biblioteca')==='biblioteca';
+  const showFab=S.tab==='tarefas'||S.tab==='amazon'||S.tab==='depoimentos'||(S.tab==='pessoal'&&S.current==='simoni')||(S.tab==='vendas'&&['geral','pipeline'].includes(vsub));
   fab.style.display=showFab?'flex':'none';
   const isLead=(S.tab==='vendas'&&['geral','pipeline'].includes(vsub));
-  fab.querySelector('.fablabel').textContent=isLead?'Novo lead':'Nova tarefa';
-  fab.onclick=isLead?openNewLead:()=>{draft={title:'',owner:S.current,due:todayISO(),cat:'rotina',review:false,recur:false,dep:'',prio:null,defPronto:'',subs:[],links:[],proj:S.tab==='amazon'?'amazon':'vrd'};openNew()};
-  ({hoje:vHoje,tarefas:vTarefas,vendas:vVendas,posvenda:vPosVenda,amazon:vAmazon,hubvrd:vHub,admin:vAdmin,financeiro:vFinanceiro,pessoal:vPessoal,guia:vGuia}[S.tab]||vHoje)(v);
+  fab.querySelector('.fablabel').textContent=isLead?'Novo lead':(depoBib?'Nova aula':(S.tab==='depoimentos'?'Novo depoimento':'Nova tarefa'));
+  fab.onclick=isLead?openNewLead:(depoBib?()=>{const a={id:'au'+Date.now(),nome:'',data:todayISO(),gravacao:'',docs:[],cortes:[]};S.aulas=S.aulas||[];S.aulas.unshift(a);save();openAula(a)}:()=>{draft={title:'',owner:S.tab==='depoimentos'?'carol':S.current,due:todayISO(),cat:S.tab==='depoimentos'?'conteudo':'rotina',review:false,recur:false,dep:'',prio:null,defPronto:'',subs:[],links:[],proj:S.tab==='amazon'?'amazon':(S.tab==='pessoal'?'pessoal':(S.tab==='depoimentos'?'depoimentos':'vrd'))};openNew()});
+  ({hoje:vHoje,tarefas:vTarefas,vendas:vVendas,posvenda:vPosVenda,amazon:vAmazon,depoimentos:vDepoimentos,hubvrd:vHub,admin:vAdmin,financeiro:vFinanceiro,pessoal:vPessoal,guia:vGuia}[S.tab]||vHoje)(v);
   v.scrollTop=0;
 }
 function renderWho(){
@@ -982,11 +1074,11 @@ function digestCard(title,avatarHtml,txt){
   return card;
 }
 
-function taskRow(tk){
+function taskRow(tk,showOwner){
   const row=el('div','task'+(tk.status==='done'?' done':''));
   const ck=el('div','check'+(tk.status==='done'?' on':''),`<svg viewBox="0 0 24 24"><path d="M5 12l4 4L19 7"/></svg>`);
   ck.onclick=e=>{e.stopPropagation();toggleDone(tk,ck,row)};
-  const body=el('div','tk-body',`<div class="tk-title">${esc(tk.title)}</div><div class="tk-meta">${metaChips(tk,false)}</div>`);
+  const body=el('div','tk-body',`<div class="tk-title">${esc(tk.title)}</div><div class="tk-meta">${metaChips(tk,!!showOwner)}</div>`);
   body.onclick=()=>openTask(tk);
   row.appendChild(ck);row.appendChild(body);
   return row;
@@ -1009,6 +1101,22 @@ function viewToggle(key,def,opts){
     tg.appendChild(b);
   });
   return tg;
+}
+/* linha de controle com rótulo à esquerda (VER / PESSOA / ÁREA / PERÍODO) — dá hierarquia */
+function ctrlRow(label,...children){
+  const row=el('div','ctrlrow');
+  row.appendChild(el('span','ctrllabel',label));
+  children.forEach(c=>{if(c)row.appendChild(c)});
+  return row;
+}
+/* filtro de pessoa reaproveitável (chips) */
+function personFilter(stateKey,ids){
+  const cur=S[stateKey]||'all';
+  const fr=el('div','filterrow');
+  const all=el('button','fbtn'+(cur==='all'?' on':''),'Todos');
+  all.onclick=()=>{S[stateKey]='all';save();render()};fr.appendChild(all);
+  (ids||USERS.map(u=>u.id)).forEach(id=>{const u=U(id);const b=el('button','fbtn'+(cur===id?' on':''),`<span class="dot" style="background:${u.color}"></span>${u.name}`);b.onclick=()=>{S[stateKey]=id;save();render()};fr.appendChild(b)});
+  return fr;
 }
 function curMonth(){return todayISO().slice(0,7)}
 function shiftMonth(ref,delta){let p=ref.split('-').map(Number);let y=p[0],m=p[1]+delta;if(m<1){m=12;y--}if(m>12){m=1;y++}return y+'-'+String(m).padStart(2,'0')}
@@ -1063,23 +1171,17 @@ function vTarefas(v){
     const scopeTg=el('div','vtoggle scopetg');
     [['equipe','👥 Da equipe'],['minhas','🙋 Minhas']].forEach(([id,lab])=>{const b=el('button',scope===id?'on':'',lab);b.onclick=()=>{S.tarefasScope=id;save();render()};scopeTg.appendChild(b)});
     v.appendChild(scopeTg);
-    v.appendChild(viewToggle('tarefasMode','cal',minhas?[['cal','▦ Calendário'],['board','▤ Quadro'],['list','☰ Lista']]:[['cal','▦ Calendário'],['board','▤ Quadro'],['list','☰ Lista'],['painel','📊 Painel']]));
+    v.appendChild(ctrlRow('Ver',viewToggle('tarefasMode','cal',minhas?[['cal','▦ Calendário'],['board','▤ Quadro'],['list','☰ Lista']]:[['cal','▦ Calendário'],['board','▤ Quadro'],['list','☰ Lista'],['painel','📊 Painel']])));
     if(!minhas&&mode==='painel'){painelBody(v);return}
-    if(!minhas){
-      const fr=el('div','filterrow');
-      const all=el('button','fbtn'+(S.filter==='all'?' on':''),'Todos');
-      all.onclick=()=>{S.filter='all';save();render()};fr.appendChild(all);
-      USERS.forEach(u=>{const b=el('button','fbtn'+(S.filter===u.id?' on':''),`<span class="dot" style="background:${u.color}"></span>${u.name}`);b.onclick=()=>{S.filter=u.id;save();render()};fr.appendChild(b)});
-      v.appendChild(fr);
-    }
+    if(!minhas)v.appendChild(ctrlRow('Pessoa',personFilter('filter')));
     const fr2=el('div','filterrow');
     const lateBtn=el('button','fbtn'+(S.lateOnly?' on':''),'⏰ Atrasadas');
     lateBtn.onclick=()=>{S.lateOnly=!S.lateOnly;save();render()};fr2.appendChild(lateBtn);
     const allCat=el('button','fbtn'+(S.catFilter==='all'?' on':''),'Todas as áreas');
     allCat.onclick=()=>{S.catFilter='all';save();render()};fr2.appendChild(allCat);
     Object.keys(CATS).forEach(c=>{const b=el('button','fbtn'+(S.catFilter===c?' on':''),CATS[c].l);b.onclick=()=>{S.catFilter=c;save();render()};fr2.appendChild(b)});
-    v.appendChild(fr2);
-    let list=minhas?S.tasks.filter(x=>x.owner===S.current):S.tasks.filter(x=>(S.filter==='all'||x.owner===S.filter)&&x.proj!=='amazon');
+    v.appendChild(ctrlRow('Área',fr2));
+    let list=minhas?S.tasks.filter(x=>x.owner===S.current&&isVRDTask(x)):S.tasks.filter(x=>(S.filter==='all'||x.owner===S.filter)&&isVRDTask(x));
     if(S.catFilter!=='all')list=list.filter(x=>x.cat===S.catFilter);
     if(S.lateOnly)list=list.filter(x=>x.status!=='done'&&dueLabel(x.due)&&dueLabel(x.due).over);
     if(mode==='cal'){renderCalendar(v,list);return}
@@ -1087,9 +1189,18 @@ function vTarefas(v){
     taskBoard(v,list);
   }else{
     v.appendChild(el('div','pagehead',`<div class="k">Visão completa</div><h2>Minhas tarefas</h2>
-      <p>Todas as suas tarefas — calendário, quadro ou lista, pra planejar além do dia de hoje.</p>`));
-    v.appendChild(viewToggle('tarefasMode','cal',[['cal','▦ Calendário'],['board','▤ Quadro'],['list','☰ Lista']]));
-    const list=S.tasks.filter(x=>x.owner===S.current&&x.proj!=='amazon');
+      <p>Todas as suas tarefas — filtre por tipo (área) e veja em calendário, quadro ou lista.</p>`));
+    v.appendChild(ctrlRow('Ver',viewToggle('tarefasMode','cal',[['cal','▦ Calendário'],['board','▤ Quadro'],['list','☰ Lista']])));
+    const fr2=el('div','filterrow');
+    const lateBtn=el('button','fbtn'+(S.lateOnly?' on':''),'⏰ Atrasadas');
+    lateBtn.onclick=()=>{S.lateOnly=!S.lateOnly;save();render()};fr2.appendChild(lateBtn);
+    const allCat=el('button','fbtn'+(S.catFilter==='all'?' on':''),'Todas as áreas');
+    allCat.onclick=()=>{S.catFilter='all';save();render()};fr2.appendChild(allCat);
+    Object.keys(CATS).forEach(c=>{const b=el('button','fbtn'+(S.catFilter===c?' on':''),CATS[c].l);b.onclick=()=>{S.catFilter=c;save();render()};fr2.appendChild(b)});
+    v.appendChild(ctrlRow('Área',fr2));
+    let list=S.tasks.filter(x=>x.owner===S.current&&isVRDTask(x));
+    if(S.catFilter!=='all')list=list.filter(x=>x.cat===S.catFilter);
+    if(S.lateOnly)list=list.filter(x=>x.status!=='done'&&dueLabel(x.due)&&dueLabel(x.due).over);
     if(mode==='cal'){renderCalendar(v,list);return}
     if(mode==='list'){agendaList(v,list);return}
     taskBoard(v,list);
@@ -1208,7 +1319,7 @@ const capitalize=s=>s.charAt(0).toUpperCase()+s.slice(1);
 /* ---- PAINEL (visão de gestão, dentro de Tarefas equipe) ---- */
 function painelBody(v){
   v.appendChild(seclab('Painel da equipe'));
-  const allT=S.tasks.filter(x=>x.proj!=='amazon');
+  const allT=S.tasks.filter(x=>isVRDTask(x));
   const done=allT.filter(x=>x.status==='done').length;
   const overdue=allT.filter(x=>x.status!=='done'&&dueLabel(x.due)&&dueLabel(x.due).over).length;
   const blocked=S.checkins.filter(c=>c.date===todayISO()&&c.blocked).length;
@@ -1230,7 +1341,7 @@ function painelBody(v){
   v.appendChild(seclab('Por pessoa'));
   const cards=el('div','pcards');
   USERS.forEach(u=>{
-    const mine=S.tasks.filter(x=>x.owner===u.id&&x.proj!=='amazon');if(!mine.length)return;
+    const mine=S.tasks.filter(x=>x.owner===u.id&&isVRDTask(x));if(!mine.length)return;
     const d=mine.filter(x=>x.status==='done').length;
     const over=mine.filter(x=>x.status!=='done'&&dueLabel(x.due)&&dueLabel(x.due).over).length;
     const pct=Math.round(d/mine.length*100);
@@ -1247,7 +1358,7 @@ function painelBody(v){
   /* ⚖️ Carga da equipe — quem está sobrecarregado vs. livre */
   v.appendChild(seclab('⚖️ Carga da equipe'));
   const loads=USERS.map(u=>{
-    const openT=S.tasks.filter(x=>x.owner===u.id&&x.status!=='done'&&x.proj!=='amazon');
+    const openT=S.tasks.filter(x=>x.owner===u.id&&x.status!=='done'&&isVRDTask(x));
     const late=openT.filter(x=>dueLabel(x.due)&&dueLabel(x.due).over).length;
     return {u,open:openT.length,late};
   }).sort((a,b)=>b.open-a.open);
@@ -1279,48 +1390,182 @@ function painelBody(v){
 /* ---- PROJETO AMAZON (separado do VRD) ---- */
 function vAmazon(v){
   v.appendChild(el('div','pagehead',`<div class="k">Projeto à parte · fora do VRD</div><h2>Projeto Amazon</h2>
-    <p>A parceria de marcas/afiliados da Simoni na Amazon. Separado do VRD pra não misturar a operação — quem cuida aqui é a Mayara e a Carol.</p>`));
-  v.appendChild(el('div','note','Rotina: filtrar mensagens das marcas → passar pra Simoni no grupo → 1×/mês checar novas campanhas (pegar link do produto na planilha) → subir vídeos da Simoni e gerar links de produto.'));
-  const list=S.tasks.filter(x=>x.proj==='amazon');
+    <p>A parceria de marcas/afiliados da Simoni na Amazon. Separado do VRD — quem cuida aqui é a Mayara e a Carol.</p>`));
+  v.appendChild(el('div','note','Rotina: filtrar mensagens das marcas → passar pra Simoni no grupo → 1×/mês checar novas campanhas → subir vídeos da Simoni e gerar links de produto.'));
+  v.appendChild(ctrlRow('Ver',viewToggle('amazonMode','board',[['cal','▦ Calendário'],['board','▤ Quadro'],['list','☰ Lista']])));
+  v.appendChild(ctrlRow('Pessoa',personFilter('amazonFilter',['mayara','carol','simoni'])));
+  let list=S.tasks.filter(x=>x.proj==='amazon');
+  const af=S.amazonFilter||'all';
+  if(af!=='all')list=list.filter(x=>x.owner===af);
   if(!list.length){
-    v.appendChild(el('div','empty',`<div class="e">📦</div><div class="h">Nenhuma tarefa da Amazon ainda</div><div class="s">Toque em "Nova tarefa" pra adicionar.</div>`));
+    v.appendChild(el('div','empty',`<div class="e">📦</div><div class="h">Nenhuma tarefa da Amazon aqui</div><div class="s">Toque em "+ Nova tarefa" pra adicionar (dá pra designar pra quem quiser).</div>`));
     return;
   }
+  const mode=S.amazonMode||'board';
+  if(mode==='cal'){renderCalendar(v,list);return}
+  if(mode==='list'){agendaList(v,list);return}
   taskBoard(v,list);
 }
 
+/* ---- DEPOIMENTOS (função exclusiva da Carol) ---- */
+function vDepoimentos(v){
+  v.appendChild(el('div','pagehead',`<div class="k">Conteúdo · função da Carol</div><h2>Depoimentos & aulas</h2>
+    <p>Acervo dos vídeos das reuniões ao vivo, organizado por aula — com a gravação, os documentos e os cortes (depoimentos/trechos) de cada uma.</p>`));
+  v.appendChild(viewToggle('depoView','biblioteca',[['biblioteca','🎞️ Biblioteca por aula'],['tarefas','📋 Quadro de edição']]));
+  if((S.depoView||'biblioteca')==='tarefas'){
+    v.appendChild(el('div','note','Quadro do fluxo de edição: A fazer → Fazendo → Em revisão → Feito. Em cada card dá pra anexar o bruto e o final e marcar subtarefas.'));
+    v.appendChild(ctrlRow('Ver',viewToggle('depoMode','board',[['cal','▦ Calendário'],['board','▤ Quadro'],['list','☰ Lista']])));
+    const list=S.tasks.filter(x=>x.proj==='depoimentos');
+    if(!list.length){v.appendChild(el('div','empty',`<div class="e">🎬</div><div class="h">Nenhum depoimento no quadro</div><div class="s">Mude pra Biblioteca ou toque em "+ Novo depoimento".</div>`));return}
+    const mode=S.depoMode||'board';
+    if(mode==='cal'){renderCalendar(v,list);return}
+    if(mode==='list'){agendaList(v,list);return}
+    taskBoard(v,list);return;
+  }
+  depoBiblioteca(v);
+}
+const CORTE_COL={'a fazer':'#9E998D','editando':'#E2A33C','pronto':'#46B07C','publicado':'#5AA6C9'};
+function depoBiblioteca(v){
+  S.aulas=S.aulas||[];
+  v.appendChild(el('div','note','Organize por aula/reunião: guarde a gravação completa, os documentos e os cortes (depoimentos e trechos) que dá pra tirar dela. Toque numa aula pra editar.'));
+  if(!S.aulas.length){v.appendChild(el('div','empty',`<div class="e">🎞️</div><div class="h">Nenhuma aula guardada ainda</div><div class="s">Toque em "+ Nova aula" pra começar a organizar.</div>`));return}
+  S.aulas.forEach(a=>{
+    const cortes=a.cortes||[];const done=cortes.filter(c=>c.status==='pronto'||c.status==='publicado').length;
+    const card=el('div','aula');
+    const docsHtml=(a.docs||[]).map(d=>`<a href="${esc(d.url)}" target="_blank" rel="noopener" class="aula-doc" onclick="event.stopPropagation()">📄 ${esc(d.name||'doc')}</a>`).join('');
+    const cortesHtml=cortes.length?cortes.map(c=>{const col=CORTE_COL[c.status||'a fazer'];return `<div class="aula-corte"><span class="cdot" style="background:${col}"></span><span class="ct">${esc(c.t||'(sem nome)')}</span><span class="cst" style="color:${col}">${c.status||'a fazer'}</span>${c.url?`<a href="${esc(c.url)}" target="_blank" rel="noopener" class="clink" onclick="event.stopPropagation()">abrir ↗</a>`:''}</div>`}).join(''):'<div class="aula-empty">Sem cortes ainda</div>';
+    card.innerHTML=`<div class="aula-h"><div class="aula-tt"><div class="aula-n">${esc(a.nome||'(sem nome)')}</div><div class="aula-d">${a.data?a.data.split('-').reverse().slice(0,2).join('/'):''}</div></div>${a.gravacao?`<a href="${esc(a.gravacao)}" target="_blank" rel="noopener" class="aula-rec" onclick="event.stopPropagation()">▶ Gravação</a>`:''}</div>
+      ${docsHtml?`<div class="aula-docs">${docsHtml}</div>`:''}
+      <div class="aula-csec">Cortes · ${done}/${cortes.length} prontos</div>
+      <div class="aula-cortes">${cortesHtml}</div>`;
+    card.onclick=()=>openAula(a);
+    v.appendChild(card);
+  });
+}
+let aulaEd;
+function openAula(a){aulaEd=a;drawAula()}
+function drawAula(){
+  const a=aulaEd;a.docs=a.docs||[];a.cortes=a.cortes||[];
+  const STORD=['a fazer','editando','pronto','publicado'];
+  const docs=a.docs.map((d,i)=>`<div class="linkrow"><span class="lkico">📄</span><a href="${esc(d.url)}" target="_blank" rel="noopener" class="lkname">${esc(d.name||d.url)}</a><button class="subx" data-di="${i}">✕</button></div>`).join('');
+  const cortes=a.cortes.map((c,i)=>{const col=CORTE_COL[c.status||'a fazer'];return `<div class="corte"><input class="corte-n" data-ci="${i}" value="${esc(c.t||'')}" placeholder="Nome do corte / depoimento"><button class="corte-st" data-ci="${i}" style="background:${col}22;color:${col};border-color:${col}66">${c.status||'a fazer'}</button><input class="corte-u" data-ci="${i}" value="${esc(c.url||'')}" placeholder="link do corte"><button class="subx corte-x" data-cx="${i}">✕</button></div>`}).join('');
+  openSheet(`<h3>Aula / reunião</h3>
+    <div class="field"><label>Nome</label><input id="auN" value="${esc(a.nome||'')}" placeholder="Ex.: Reunião ao vivo 03/06"></div>
+    <div class="field"><label>Data</label><input id="auD" type="date" value="${a.data||''}"></div>
+    <div class="field"><label>Link da gravação (bruto completo)</label><input id="auG" value="${esc(a.gravacao||'')}" placeholder="Cole o link da gravação"></div>
+    <div class="field"><label>Documentos da aula</label>${docs}<div class="linkadd"><input id="auDocN" placeholder="Nome (ex.: Roteiro)"><input id="auDocU" placeholder="Link"><button id="auDocAdd">Anexar</button></div></div>
+    <div class="field"><label>Cortes / depoimentos</label><div class="cortes">${cortes}</div><button class="addfield" id="auCorteAdd">+ adicionar corte</button></div>
+    <button class="primary" id="auSave">Pronto</button>
+    <button class="danger" id="auDel" style="margin-top:8px">Excluir aula</button>`);
+  sheet.querySelector('#auN').oninput=e=>{a.nome=e.target.value;save()};
+  sheet.querySelector('#auD').onchange=e=>{a.data=e.target.value;save()};
+  sheet.querySelector('#auG').oninput=e=>{a.gravacao=e.target.value;save()};
+  sheet.querySelectorAll('.subx[data-di]').forEach(b=>b.onclick=()=>{a.docs.splice(+b.dataset.di,1);save();drawAula()});
+  sheet.querySelector('#auDocAdd').onclick=()=>{const u=sheet.querySelector('#auDocU').value.trim();if(!u)return;a.docs.push({name:sheet.querySelector('#auDocN').value.trim()||u,url:u});save();drawAula()};
+  sheet.querySelectorAll('.corte-n').forEach(inp=>inp.onchange=()=>{a.cortes[+inp.dataset.ci].t=inp.value;save()});
+  sheet.querySelectorAll('.corte-u').forEach(inp=>inp.onchange=()=>{a.cortes[+inp.dataset.ci].url=inp.value;save()});
+  sheet.querySelectorAll('.corte-st').forEach(b=>b.onclick=()=>{const c=a.cortes[+b.dataset.ci];const i=STORD.indexOf(c.status||'a fazer');c.status=STORD[(i+1)%STORD.length];save();drawAula()});
+  sheet.querySelectorAll('.corte-x').forEach(b=>b.onclick=()=>{a.cortes.splice(+b.dataset.cx,1);save();drawAula()});
+  sheet.querySelector('#auCorteAdd').onclick=()=>{a.cortes.push({t:'',status:'a fazer',url:''});save();drawAula()};
+  sheet.querySelector('#auSave').onclick=()=>{save();closeSheet();render()};
+  sheet.querySelector('#auDel').onclick=()=>{S.aulas=S.aulas.filter(x=>x!==a);save();closeSheet();render()};
+}
+
 /* ---- FINANCEIRO (privado · só Simoni) ---- */
+const FINSECS=[['resumo','Resumo'],['lancamentos','Lançamentos'],['contas','A pagar / receber']];
 function vFinanceiro(v){
   const F=S.financeiro;F.lancamentos=F.lancamentos||[];
   v.appendChild(el('div','pagehead',`<div class="k">🔒 Privado · só você</div><h2>Financeiro</h2>
-    <p>O dinheiro do negócio num lugar só. Ninguém além de você vê isto.</p>`));
-  const ent=F.lancamentos.filter(x=>x.tipo==='entrada').reduce((s,x)=>s+x.valor,0);
-  const sai=F.lancamentos.filter(x=>x.tipo==='saida').reduce((s,x)=>s+x.valor,0);
-  const pend=F.lancamentos.filter(x=>x.status==='pendente'&&x.tipo==='saida').reduce((s,x)=>s+x.valor,0);
-  const res=ent-sai;
+    <p>O raio-x financeiro do negócio da Simoni. Ninguém além de você vê isto.</p>`));
+  v.appendChild(subNav(FINSECS,'finSub','resumo'));
+  ({resumo:finResumo,lancamentos:finLancamentos,contas:finContas}[S.finSub||'resumo']||finResumo)(v,F);
+}
+function finResumo(v,F){
+  const mk=todayISO().slice(0,7),L=F.lancamentos,inM=x=>(x.venc||'').slice(0,7)===mk,sum=a=>a.reduce((s,x)=>s+(x.valor||0),0);
+  const entM=sum(L.filter(x=>x.tipo==='entrada'&&inM(x))),saiM=sum(L.filter(x=>x.tipo==='saida'&&inM(x)));
+  const lucro=entM-saiM,margem=entM?Math.round(lucro/entM*100):0;
+  const aReceber=sum(L.filter(x=>x.tipo==='entrada'&&x.status==='pendente')),aPagar=sum(L.filter(x=>x.tipo==='saida'&&x.status==='pendente'));
   v.appendChild(kpiGrid([
-    {l:'Entradas',n:money(ent),color:'#7FD3A6'},
-    {l:'Saídas',n:money(sai),color:'#E98B80'},
-    {l:'Resultado',n:money(res),color:res>=0?'#E6C871':'#E98B80',gold:true},
-    {l:'A pagar (pendente)',n:money(pend),color:'#E2A33C'},
+    {l:'Receita do mês',n:money(entM),color:'#7FD3A6'},
+    {l:'Despesas do mês',n:money(saiM),color:'#E98B80'},
+    {l:'Lucro do mês',n:money(lucro),color:lucro>=0?'#E6C871':'#E98B80',gold:true},
+    {l:'Margem',n:margem+'%',color:'#E6C871'},
+    {l:'A receber',n:money(aReceber),color:'#7FD3A6'},
+    {l:'A pagar',n:money(aPagar),color:'#E2A33C'},
   ]));
-  v.appendChild(seclab('Lançamentos'));
-  if(!F.lancamentos.length)v.appendChild(el('div','',`<div style="color:var(--faint);font-size:13px;padding:0 4px 8px">Nada lançado ainda.</div>`));
-  F.lancamentos.slice().sort((a,b)=>(a.venc||'9')<(b.venc||'9')?-1:1).forEach(item=>{
-    const row=el('div','finrow');
-    const sign=item.tipo==='entrada'?'+':'−';
-    const col=item.tipo==='entrada'?'#7FD3A6':'#E98B80';
-    const dl=dueLabel(item.venc);
-    row.innerHTML=`<div class="finb"><div class="fintitle">${esc(item.desc)}</div>
-      <div class="tk-meta"><span class="chip">${esc(item.cat||'—')}</span><span class="chip ${item.status==='pago'?'cat-comercial':'rev'}">${item.status==='pago'?'pago ✓':'pendente'}</span>${dl?`<span class="chip due ${dl.over&&item.status!=='pago'?'over':''}">vence ${dl.t}</span>`:''}</div></div>
-      <div class="finval" style="color:${col}">${sign} ${money(item.valor)}</div>`;
-    row.onclick=()=>openLancamento(item);
-    v.appendChild(row);
-  });
-  const add=el('button','primary','+ Adicionar lançamento');add.onclick=()=>openLancamento(null);v.appendChild(add);
+  const meta=F.meta||0,metaPct=meta?Math.min(100,Math.round(entM/meta*100)):0;
+  const mc=el('div','fcard');
+  mc.innerHTML=`<div class="fcard-h"><span>🎯 Meta de faturamento do mês</span><button class="fmeta-edit" id="fMetaEdit">editar</button></div>
+    <div class="fbar-row"><div class="fbar"><i style="width:${metaPct}%;background:var(--gold)"></i></div><div class="fbar-v">${money(entM)} <span>/ ${money(meta)}</span></div></div>
+    <div class="fmeta-pct">${meta?metaPct+'% da meta':'Defina sua meta em "editar".'}</div>`;
+  v.appendChild(mc);
+  mc.querySelector('#fMetaEdit').onclick=()=>{openSheet(`<h3>Meta de faturamento do mês</h3><div class="field"><label>Meta (R$)</label><input id="fMetaIn" type="number" step="100" value="${F.meta||''}" placeholder="0"></div><button class="primary" id="fMetaSave">Salvar</button>`);sheet.querySelector('#fMetaSave').onclick=()=>{S.financeiro.meta=parseFloat(sheet.querySelector('#fMetaIn').value)||0;save();closeSheet();render()}};
+  const catMap={};L.filter(x=>x.tipo==='saida'&&inM(x)).forEach(x=>{catMap[x.cat||'Outros']=(catMap[x.cat||'Outros']||0)+x.valor});
+  const cats=Object.entries(catMap).sort((a,b)=>b[1]-a[1]),maxCat=Math.max(1,...cats.map(c=>c[1]));
+  if(cats.length){
+    v.appendChild(seclab('Despesas por categoria · mês'));
+    const wrap=el('div','fcatwrap');
+    cats.forEach(([c,val])=>{const row=el('div','fcatrow');row.innerHTML=`<div class="fcn">${esc(c)}</div><div class="fbar"><i style="width:${Math.round(val/maxCat*100)}%;background:#E2A33C"></i></div><div class="fcv">${money(val)} <span>${saiM?Math.round(val/saiM*100):0}%</span></div>`;wrap.appendChild(row)});
+    v.appendChild(wrap);
+  }
+  const months={};L.forEach(x=>{const k=(x.venc||'').slice(0,7);if(!k)return;months[k]=months[k]||{e:0,s:0};if(x.tipo==='entrada')months[k].e+=x.valor;else months[k].s+=x.valor});
+  const mkeys=Object.keys(months).sort().slice(-4);
+  if(mkeys.length){
+    v.appendChild(seclab('Entradas × saídas · últimos meses'));
+    const maxM=Math.max(1,...mkeys.map(k=>Math.max(months[k].e,months[k].s)));
+    const wrap=el('div','fmonwrap');
+    mkeys.forEach(k=>{const m=months[k],lbl=k.slice(5)+'/'+k.slice(2,4);const row=el('div','fmonrow');
+      row.innerHTML=`<div class="fmn">${lbl}</div><div class="fmbars">
+        <div class="fmb"><div class="fmtrack"><i style="width:${Math.round(m.e/maxM*100)}%;background:#46B07C"></i></div><span>${money(m.e)}</span></div>
+        <div class="fmb"><div class="fmtrack"><i style="width:${Math.round(m.s/maxM*100)}%;background:#D9594C"></i></div><span>${money(m.s)}</span></div></div>`;
+      wrap.appendChild(row)});
+    v.appendChild(wrap);
+    v.appendChild(el('div','flegend','<span class="lg"><i style="background:#46B07C"></i>Entradas</span><span class="lg"><i style="background:#D9594C"></i>Saídas</span>'));
+  }
   v.appendChild(seclab('Notas financeiras'));
   const ta=el('textarea','perstextarea');ta.value=F.notas||'';ta.placeholder='Anotações privadas...';ta.onchange=()=>{F.notas=ta.value;save()};
   v.appendChild(ta);
+}
+function finRow(item){
+  const row=el('div','finrow'),sign=item.tipo==='entrada'?'+':'−',col=item.tipo==='entrada'?'#7FD3A6':'#E98B80',dl=dueLabel(item.venc);
+  row.innerHTML=`<div class="finb"><div class="fintitle">${esc(item.desc)}</div>
+    <div class="tk-meta"><span class="chip">${esc(item.cat||'—')}</span><span class="chip ${item.status==='pago'?'cat-comercial':'rev'}">${item.status==='pago'?'pago ✓':'pendente'}</span>${dl?`<span class="chip due ${dl.over&&item.status!=='pago'?'over':''}">vence ${dl.t}</span>`:''}</div></div>
+    <div class="finval" style="color:${col}">${sign} ${money(item.valor)}</div>`;
+  row.onclick=()=>openLancamento(item);return row;
+}
+function finLancamentos(v,F){
+  const filt=S.finFilter||'todos',fr=el('div','filterrow');
+  [['todos','Todos'],['entrada','Entradas'],['saida','Saídas'],['pendente','Pendentes']].forEach(([id,lab])=>{const b=el('button','fbtn'+(filt===id?' on':''),lab);b.onclick=()=>{S.finFilter=id;save();render()};fr.appendChild(b)});
+  v.appendChild(ctrlRow('Filtro',fr));
+  let list=F.lancamentos.slice();
+  if(filt==='entrada')list=list.filter(x=>x.tipo==='entrada');else if(filt==='saida')list=list.filter(x=>x.tipo==='saida');else if(filt==='pendente')list=list.filter(x=>x.status==='pendente');
+  list.sort((a,b)=>(a.venc||'9')<(b.venc||'9')?1:-1);
+  if(!list.length)v.appendChild(el('div','',`<div style="color:var(--faint);font-size:13px;padding:0 4px 8px">Nada aqui.</div>`));
+  list.forEach(item=>v.appendChild(finRow(item)));
+  const add=el('button','primary','+ Adicionar lançamento');add.onclick=()=>openLancamento(null);v.appendChild(add);
+}
+function contaRow(item){
+  const row=el('div','finrow'),col=item.tipo==='entrada'?'#7FD3A6':'#E98B80',dl=dueLabel(item.venc);
+  const body=el('div','finb',`<div class="fintitle">${esc(item.desc)}</div>
+    <div class="tk-meta"><span class="chip">${esc(item.cat||'—')}</span>${dl?`<span class="chip due ${dl.over?'over':''}">vence ${dl.t}</span>`:''}</div>`);
+  body.onclick=()=>openLancamento(item);
+  const right=el('div','finright');
+  right.appendChild(el('div','finval',`${item.tipo==='entrada'?'+':'−'} ${money(item.valor)}`)).style.color=col;
+  const mk=el('button','mini go',item.tipo==='entrada'?'Recebido ✓':'Pago ✓');
+  mk.onclick=e=>{e.stopPropagation();item.status='pago';save();render()};
+  right.appendChild(mk);
+  row.appendChild(body);row.appendChild(right);return row;
+}
+function finContas(v,F){
+  const sum=a=>a.reduce((s,x)=>s+x.valor,0);
+  const pagar=F.lancamentos.filter(x=>x.tipo==='saida'&&x.status==='pendente').sort((a,b)=>(a.venc||'9')<(b.venc||'9')?-1:1);
+  const receber=F.lancamentos.filter(x=>x.tipo==='entrada'&&x.status==='pendente').sort((a,b)=>(a.venc||'9')<(b.venc||'9')?-1:1);
+  v.appendChild(seclab('💸 A pagar · '+money(sum(pagar))));
+  if(!pagar.length)v.appendChild(el('div','',`<div style="color:var(--faint);font-size:13px;padding:0 4px 8px">Nada a pagar. 🎉</div>`));
+  pagar.forEach(item=>v.appendChild(contaRow(item)));
+  v.appendChild(seclab('💰 A receber · '+money(sum(receber))));
+  if(!receber.length)v.appendChild(el('div','',`<div style="color:var(--faint);font-size:13px;padding:0 4px 8px">Nada a receber.</div>`));
+  receber.forEach(item=>v.appendChild(contaRow(item)));
 }
 let fdraft;
 function openLancamento(item){
@@ -1355,9 +1600,19 @@ function drawLancamento(isEdit){
 
 /* ---- PESSOAL (privado · só Simoni) ---- */
 function vPessoal(v){
+  const me=S.current, isSim=(me==='simoni');
+  const ptasks=S.tasks.filter(x=>x.proj==='pessoal');
+  if(!isSim){
+    v.appendChild(el('div','pagehead',`<div class="k">Pessoal da Simoni</div><h2>Tarefas pessoais</h2>
+      <p>Só o que a Simoni designou pra você. Marque como feito quando concluir.</p>`));
+    const mine=ptasks.filter(x=>x.owner===me);
+    if(!mine.length){v.appendChild(el('div','empty',`<div class="e">🌿</div><div class="h">Nada designado pra você</div><div class="s">Quando a Simoni te passar algo pessoal, aparece aqui.</div>`));return}
+    mine.forEach(tk=>v.appendChild(taskRow(tk)));
+    return;
+  }
   const P=S.pessoal;P.items=P.items||[];
   v.appendChild(el('div','pagehead',`<div class="k">🔒 Privado · só você</div><h2>Pessoal</h2>
-    <p>Seu espaço pessoal. Nada disto aparece pro time.</p>`));
+    <p>Seu espaço pessoal + as tarefas que você passa pra quem te ajuda. Só você designa; cada pessoa só vê o que for dela.</p>`));
   v.appendChild(seclab('📝 Minhas notas'));
   const ta=el('textarea','perstextarea');ta.value=P.notas||'';ta.placeholder='Anote o que quiser...';ta.onchange=()=>{P.notas=ta.value;save()};
   v.appendChild(ta);
@@ -1374,6 +1629,10 @@ function vPessoal(v){
   });
   const add=el('button','addfield','+ adicionar lembrete');add.onclick=()=>{P.items.push({t:'',done:false});save();render()};
   v.appendChild(add);
+  v.appendChild(seclab('👥 Tarefas designadas · '+ptasks.length));
+  v.appendChild(el('div','note','Crie em "+ Nova tarefa" e escolha o Responsável. Cada pessoa só vê na aba Pessoal dela o que você designar pra ela.'));
+  if(!ptasks.length)v.appendChild(el('div','',`<div style="color:var(--faint);font-size:13px;padding:2px 4px 8px">Nenhuma tarefa designada ainda.</div>`));
+  else ptasks.forEach(tk=>v.appendChild(taskRow(tk,true)));
 }
 
 function vGuia(v){
@@ -1442,9 +1701,9 @@ function hubTableCard(title,sub,cols,rows){
   return card;
 }
 function periodChips(active){
-  const per=el('div','subtabs');
+  const per=el('div','subtabs chips-sm');
   ['Hoje','Ontem','7 dias','30 dias','Mês','Tudo'].forEach((p,i)=>{const b=el('button','subtab'+(i===(active==null?3:active)?' on':''),p);b.onclick=()=>{[...per.children].forEach(c=>c.classList.remove('on'));b.classList.add('on')};per.appendChild(b)});
-  return per;
+  return ctrlRow('Período',per);
 }
 function subNav(sections,key,def){
   const sub=S[key]||def;
@@ -1808,6 +2067,7 @@ function openTask(tk){
     ${tk.review?`<span class="chip ${tk.reviewed?'cat-comercial':'rev'}">${tk.reviewed?'revisado ✓':'aguarda revisão'}</span>`:''}</div>
     ${hasSop?`<button class="sopbtn" id="sopBtn">📋 Como fazer — passo a passo</button>`:''}
     <div class="field"><label>Status</label><div class="seg" id="tSt">${STATUSES.map(([s,l])=>`<button data-st="${s}" class="${tk.status===s?'on':''}">${l}</button>`).join('')}</div></div>
+    <div class="field"><label>Responsável</label><select id="tOwner">${USERS.map(u=>`<option value="${u.id}" ${u.id===tk.owner?'selected':''}>${u.name} · ${u.role}</option>`).join('')}</select></div>
     <div class="field"><label>Prioridade</label><div class="seg" id="tPrio"><button data-p="" class="${!tk.prio?'on':''}">—</button>${Object.keys(PRIOS).map(p=>`<button data-p="${p}" class="${tk.prio===p?'on':''}">${PRIOS[p].l}</button>`).join('')}</div></div>
     ${tk.review?`<div class="field"><div class="toggle ${tk.reviewed?'on':''}" id="revT"><div class="sw"><i></i></div><div class="tx">Revisado ✓<small>Confirmo que conferi a entrega</small></div></div></div>`:''}
     <div class="field"><label>Definição de pronto</label><textarea id="tDef" placeholder="Como saber que está pronto?">${esc(tk.defPronto||'')}</textarea></div>
@@ -1824,6 +2084,7 @@ function openTask(tk){
     if(ns==='done'&&tk.review&&!tk.reviewed){alert('Marque "Revisado" antes de concluir.');return}
     tk.status=ns;tk.doneAt=ns==='done'?todayISO():null;stampReview(tk);save();render();openTask(tk);
   });
+  sheet.querySelector('#tOwner').onchange=e=>{tk.owner=e.target.value;save();render();openTask(tk)};
   sheet.querySelectorAll('#tPrio [data-p]').forEach(b=>b.onclick=()=>{tk.prio=b.dataset.p||null;save();render();openTask(tk)});
   const rt=sheet.querySelector('#revT');if(rt)rt.onclick=()=>{tk.reviewed=!tk.reviewed;save();openTask(tk)};
   sheet.querySelector('#tDef').onchange=e=>{tk.defPronto=e.target.value;save()};
