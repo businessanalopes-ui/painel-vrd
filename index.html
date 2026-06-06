@@ -941,30 +941,29 @@ function vHoje(v){
     <p>Suas tarefas de hoje e o que outras pessoas dependem de você.</p>`));
 
   const grid=el('div','daygrid');
+  const dayEmpty=t=>el('div','',`<div style="color:var(--faint);font-size:13px;padding:2px 4px 8px">${t}</div>`);
   if(u.manager){
     const pend=S.tasks.filter(x=>x.status==='revisao').sort((a,b)=>(a.reviewSince||'9')<(b.reviewSince||'9')?-1:1);
-    if(pend.length){
-      const col=el('div','daycol');
-      col.appendChild(seclab('✅ Esperando sua aprovação · '+pend.length));
-      pend.forEach(tk=>col.appendChild(approvalRow(tk)));
-      grid.appendChild(col);
-    }
+    const col=el('div','daycol');
+    col.appendChild(seclab('✅ Esperando sua aprovação'+(pend.length?' · '+pend.length:'')));
+    if(pend.length)pend.forEach(tk=>col.appendChild(approvalRow(tk)));
+    else col.appendChild(dayEmpty('Nada esperando sua aprovação. 🎉'));
+    grid.appendChild(col);
   }
   const col2=el('div','daycol');
   col2.appendChild(seclab('Suas tarefas pra hoje'));
   if(own.length)own.forEach(tk=>col2.appendChild(taskRow(tk)));
-  else col2.appendChild(el('div','',`<div style="color:var(--faint);font-size:13px;padding:0 4px 8px">Nenhuma tarefa sua pra hoje. 🌤️</div>`));
+  else col2.appendChild(dayEmpty('Nenhuma tarefa sua pra hoje. 🌤️'));
   if(doneToday.length){
     col2.appendChild(seclab('Feitas hoje · '+doneToday.length));
     doneToday.forEach(tk=>col2.appendChild(taskRow(tk)));
   }
   grid.appendChild(col2);
-  if(depOnMe.length){
-    const col3=el('div','daycol');
-    col3.appendChild(seclab('🔗 Outras pessoas dependem de você'));
-    depOnMe.forEach(tk=>col3.appendChild(depRow(tk)));
-    grid.appendChild(col3);
-  }
+  const col3=el('div','daycol');
+  col3.appendChild(seclab('🔗 Outras pessoas dependem de você'+(depOnMe.length?' · '+depOnMe.length:'')));
+  if(depOnMe.length)depOnMe.forEach(tk=>col3.appendChild(depRow(tk)));
+  else col3.appendChild(dayEmpty('Ninguém depende de você agora.'));
+  grid.appendChild(col3);
   v.appendChild(grid);
 
   const foot=el('div','dayfoot');
@@ -1319,14 +1318,14 @@ function painelBody(v){
   v.appendChild(seclab('Por pessoa'));
   const cards=el('div','pcards');
   USERS.forEach(u=>{
-    const mine=S.tasks.filter(x=>x.owner===u.id&&isVRDTask(x));if(!mine.length)return;
+    const mine=S.tasks.filter(x=>x.owner===u.id&&isVRDTask(x));
     const d=mine.filter(x=>x.status==='done').length;
     const over=mine.filter(x=>x.status!=='done'&&dueLabel(x.due)&&dueLabel(x.due).over).length;
-    const pct=Math.round(d/mine.length*100);
+    const pct=mine.length?Math.round(d/mine.length*100):0;
     const ci=[...S.checkins].reverse().find(c=>c.user===u.id&&c.date===todayISO()&&c.blocked);
     const card=el('div','pcard');
     card.innerHTML=`<div class="prow">${av(u)}<div><div class="pn">${u.name}</div><div class="pr">${u.role}</div></div>
-      <div class="stat"><div class="s1">${d}/${mine.length}</div><div class="s2">${over?over+' atrasada(s)':'em dia'}</div></div></div>
+      <div class="stat"><div class="s1">${d}/${mine.length}</div><div class="s2">${mine.length?(over?over+' atrasada(s)':'em dia'):'sem tarefas VRD'}</div></div></div>
       <div class="pbar"><i style="width:${pct}%;background:${over?'#D9594C':'var(--gold)'}"></i></div>
       ${ci?`<div class="blocked">🚧 <div><b>Travou:</b> ${esc(ci.blocked)}</div></div>`:''}`;
     cards.appendChild(card);
