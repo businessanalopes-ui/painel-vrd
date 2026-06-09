@@ -603,7 +603,7 @@ document.getElementById('topLogo').innerHTML=globeSVG(30)+WORDMARK;
 document.getElementById('sideLogo').innerHTML=globeSVG(38)+WORDMARK;
 
 /* ============================ STATE ============================ */
-const KEY='bussola.pub4';
+const KEY='bussola.pub5';
 const PUBLISHED=false; // true = versão limpa pra publicar (estrutura sem nenhum dado de exemplo)
 const todayISO=()=>{const d=new Date();return d.toISOString().slice(0,10)};
 const addDays=n=>{const d=new Date();d.setDate(d.getDate()+n);return d.toISOString().slice(0,10)};
@@ -779,7 +779,7 @@ function seedLaunch(){
     ],
   };
 }
-function seedCofre(){ return [ {f:'Rede social',l:'—',n:'(exemplo)'},{f:'Ferramenta de e-mail',l:'—',n:'(exemplo)'},{f:'Plataforma do curso',l:'—',n:'(exemplo)'},{f:'Pagamento',l:'—',n:'(exemplo)'},{f:'Hospedagem',l:'—',n:'(exemplo)'} ]; }
+function seedCofre(){ return [ {f:'Rede social',l:'—',n:'(exemplo)'},{f:'Ferramenta de e-mail',l:'—',n:'(exemplo)'},{f:'Plataforma do curso',l:'—',n:'(exemplo)'},{f:'Pagamentos',l:'—',n:'(exemplo)'} ]; }
 
 let S=load();
 function money(n){return 'R$ '+Number(n||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}
@@ -2193,15 +2193,31 @@ function leadCard(ld,showNext){
   }
   enableCardDrag(c,'lead',ld);return c;
 }
-const VSUBS=[['geral','Visão geral'],['pipeline','Pipeline'],['documentos','Documentos']];
+const VSUBS=[['geral','Visão geral'],['pipeline','Pipeline'],['mensagens','Mensagens'],['documentos','Documentos']];
 function vVendas(v){
   v.appendChild(el('div','pagehead',`<div class="k">Comercial · CRM</div><h2>Vendas</h2>
-    <p>Visão geral, pipeline e documentos do comercial.</p>`));
+    <p>Visão geral, pipeline, mensagens e documentos do comercial.</p>`));
   const sub=S.vendaSub||'geral';
   const bar=el('div','subtabs');
   VSUBS.forEach(([id,lab])=>{const b=el('button','subtab'+(sub===id?' on':''),lab);b.onclick=()=>{S.vendaSub=id;save();render()};bar.appendChild(b)});
   v.appendChild(bar);
-  ({geral:vVendaGeral,pipeline:vVendaPipeline,documentos:vVendaDocs}[sub]||vVendaGeral)(v);
+  ({geral:vVendaGeral,pipeline:vVendaPipeline,mensagens:vVendaMensagens,documentos:vVendaDocs}[sub]||vVendaGeral)(v);
+}
+/* Biblioteca de mensagens prontas (copiar e colar) — baseada no processo da Nati */
+const MSGS=[ {cat:'Exemplo de categoria',items:[{t:'Modelo de mensagem',m:'Escreva aqui um modelo pronto para copiar e colar no atendimento.'}]} ];
+function msgCard(title,text){
+  const card=el('div','rsum');
+  const head=el('div','rsum-h',`<div class="rsum-n">${esc(title)}</div>`);
+  const cp=el('button','rsum-cp','Copiar');
+  cp.onclick=()=>{navigator.clipboard.writeText(text).then(()=>{cp.textContent='Copiado ✓';setTimeout(()=>cp.textContent='Copiar',1500)}).catch(()=>{cp.textContent='copie ↓'})};
+  head.appendChild(cp);
+  const pre=el('pre','rsum-t');pre.textContent=text;
+  card.appendChild(head);card.appendChild(pre);
+  return card;
+}
+function vVendaMensagens(v){
+  v.appendChild(el('div','note','Modelos prontos pra <b>copiar e colar</b> no WhatsApp / Direct. Troque o [nome] e os detalhes. São o processo da Nati — quanto mais ela usa, mais padroniza.'));
+  MSGS.forEach(g=>{v.appendChild(seclab(g.cat));g.items.forEach(it=>v.appendChild(msgCard(it.t,it.m)))});
 }
 function vVendaGeral(v){
   v.appendChild(el('div','note','⏱️ <b>Regra de ouro:</b> todo lead é PAGO (custou tráfego + tempo do time). Responda rápido — meta: até <b>1h</b> no horário comercial. Nunca deixe "pra depois" achando que vai incomodar: se o lead chegou, é porque quer.'));
@@ -2321,7 +2337,8 @@ function openLead(ld){
   openSheet(`<h3>${esc(ld.name)}</h3>
     <div class="sub">${esc(ld.contact||'sem contato')} · origem: ${esc(ld.source)}</div>
     <div class="field"><label>Etapa do funil</label><div class="seg" id="lSt">${S.stages.map(s=>`<button data-s="${s.id}" class="${ld.stage===s.id?'on':''}">${esc(s.l)}</button>`).join('')}</div></div>
-    <div class="field"><label>Próximo contato</label><input id="lNext" type="date" value="${ld.next||''}"></div>
+    <div class="field"><label>Próximo follow-up</label><input id="lNext" type="date" value="${ld.next||''}">
+      <div class="seg" id="lCad" style="margin-top:7px"><button data-d="0">Hoje</button><button data-d="3">+3d</button><button data-d="7">+7d</button><button data-d="15">+15d</button><button data-d="30">+30d</button></div></div>
     <div class="field"><label>Plano de interesse</label><div class="seg" id="lPl">${PLANOS.map(p=>`<button data-p="${p}" class="${ld.plano===p?'on':''}">${p}</button>`).join('')}</div></div>
     <div class="field"><label>Anotações</label><textarea id="lNote">${esc(ld.note)}</textarea></div>
     ${camposHTML(ld)}
@@ -2331,6 +2348,7 @@ function openLead(ld){
   let stage=ld.stage,plano=ld.plano;
   sheet.querySelectorAll('#lSt [data-s]').forEach(b=>b.onclick=()=>{stage=b.dataset.s;sheet.querySelectorAll('#lSt [data-s]').forEach(x=>x.classList.toggle('on',x.dataset.s===stage))});
   sheet.querySelectorAll('#lPl [data-p]').forEach(b=>b.onclick=()=>{plano=b.dataset.p;sheet.querySelectorAll('#lPl [data-p]').forEach(x=>x.classList.toggle('on',x.dataset.p===plano))});
+  sheet.querySelectorAll('#lCad [data-d]').forEach(b=>b.onclick=()=>{sheet.querySelector('#lNext').value=addDays(+b.dataset.d)});
   sheet.querySelector('#lSave').onclick=()=>{ld.stage=stage;ld.plano=plano;ld.next=sheet.querySelector('#lNext').value||null;ld.note=sheet.querySelector('#lNote').value;if(isTerminal(stage))ld.next=null;save();closeSheet();render()};
   sheet.querySelector('#lDel').onclick=()=>{S.leads=S.leads.filter(x=>x.id!==ld.id);save();closeSheet();render()};
   wireCC(ld,()=>{ld.note=sheet.querySelector('#lNote').value;ld.stage=stage;ld.plano=plano;ld.next=sheet.querySelector('#lNext').value||ld.next;openLead(ld)});
