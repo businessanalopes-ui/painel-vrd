@@ -603,7 +603,7 @@ document.getElementById('topLogo').innerHTML=globeSVG(30)+WORDMARK;
 document.getElementById('sideLogo').innerHTML=globeSVG(38)+WORDMARK;
 
 /* ============================ STATE ============================ */
-const KEY='bussola.pub3';
+const KEY='bussola.pub4';
 const PUBLISHED=false; // true = versão limpa pra publicar (estrutura sem nenhum dado de exemplo)
 const todayISO=()=>{const d=new Date();return d.toISOString().slice(0,10)};
 const addDays=n=>{const d=new Date();d.setDate(d.getDate()+n);return d.toISOString().slice(0,10)};
@@ -639,6 +639,7 @@ function seed(){
     t('Revisar a estratégia de conteúdo do mês','simoni',addDays(1),'conteudo',{dep:'ana'}),
     t('Gravar conteúdo do mês em lote','simoni',addDays(8),'conteudo'),
     t('Gravar banco de respostas do plantão técnico (FAQ)','simoni',addDays(3),'rotina'),
+    t('Refazer o webinário (mais enxuto / ao vivo, dados atuais) — pós-lançamento','simoni',addDays(25),'lancamento',{defPronto:'Webinário novo gravado/ao vivo, enxuto e com dados atualizados.'}),
     // Ana — Gestão
     t('Configurar a plataforma com o time','ana',todayISO(),'rotina',{status:'doing'}),
     t('Reunião de onboarding (gravar)','ana',addDays(1),'rotina'),
@@ -774,6 +775,7 @@ function seedLaunch(){
       {nome:'Sequências de resposta (ManyChat)',dono:'mudrek',done:false},
       {nome:'Campanha de tráfego',dono:'fernanda',done:false},
       {nome:'Páginas de venda',dono:'mudrek',done:true},
+      {nome:'⚠️ CONFERIR a página de vendas no dia (preço, datas, links) — quebrou no último lançamento',dono:'mudrek',done:false},
     ],
   };
 }
@@ -1633,6 +1635,16 @@ function vGuia(v){
       <li>Se travou, foi avisado no check-in (não some por 2 semanas).</li>
     </ul>`));
 
+  v.appendChild(el('div','gcard',`<h3><span class="em">💬</span> Como se comunicar (regra de ouro)</h3>
+    <p class="sub">Ninguém é bola de cristal. Mensagem boa economiza o tempo e a energia de todo mundo.</p>
+    <ul class="dod">
+      <li><b>Diga a INTENÇÃO no começo:</b> "preciso de ajuda", "quero um conselho", "é brainstorming", ou "só te contando (boa notícia / é piada)".</li>
+      <li><b>Contexto completo:</b> quem · o quê · onde · por quê · como. Nada de "oi" e esperar.</li>
+      <li><b>Se for problema, comece pela calma:</b> "tá sob controle, mas aconteceu X..." — não dê susto à toa.</li>
+      <li><b>Pediu um código/acesso?</b> Diga ONDE ele chega (qual e-mail / celular / authenticator).</li>
+      <li><b>Mensagem com começo, meio e fim</b> — e com verbo. 🙂</li>
+    </ul>`));
+
   v.appendChild(el('div','gcard',`<h3><span class="em">🔁</span> Como a gente trabalha</h3>
     <ul class="gen">
       <li><b>Todo dia:</b> abrir a aba <b>Hoje</b>, fazer o que é seu, marcar feito, e dar o check-in do dia.</li>
@@ -2192,6 +2204,7 @@ function vVendas(v){
   ({geral:vVendaGeral,pipeline:vVendaPipeline,documentos:vVendaDocs}[sub]||vVendaGeral)(v);
 }
 function vVendaGeral(v){
+  v.appendChild(el('div','note','⏱️ <b>Regra de ouro:</b> todo lead é PAGO (custou tráfego + tempo do time). Responda rápido — meta: até <b>1h</b> no horário comercial. Nunca deixe "pra depois" achando que vai incomodar: se o lead chegou, é porque quer.'));
   const active=S.leads.filter(x=>!isTerminal(x.stage));
   const alunos=S.leads.filter(x=>isWon(x.stage)).length;
   const firstStage=(S.stages[0]||{}).id;
