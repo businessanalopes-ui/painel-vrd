@@ -603,8 +603,8 @@ document.getElementById('topLogo').innerHTML=globeSVG(30)+WORDMARK;
 document.getElementById('sideLogo').innerHTML=globeSVG(38)+WORDMARK;
 
 /* ============================ STATE ============================ */
-const KEY='bussola.pub5';
-const PUBLISHED=false; // true = versão limpa pra publicar (estrutura sem nenhum dado de exemplo)
+const KEY='bussola.pub6';
+const PUBLISHED=true; // true = versão limpa pra publicar (estrutura sem nenhum dado de exemplo)
 const todayISO=()=>{const d=new Date();return d.toISOString().slice(0,10)};
 const addDays=n=>{const d=new Date();d.setDate(d.getDate()+n);return d.toISOString().slice(0,10)};
 
@@ -614,8 +614,7 @@ const USERS=[
   {id:'nati',   name:'Nati',    role:'Comercial · Vendas & Atendimento', color:'#5AA6C9'},
   {id:'fernanda',name:'Fernanda',role:'Tráfego pago',                color:'#46B07C'},
   {id:'mudrek', name:'Mudrek',  role:'Técnico · Dados & Criativos',  color:'#B98BD6'},
-  {id:'mayara', name:'Mayara',  role:'Social · Conteúdo',            color:'#E07A8A'},
-  {id:'carol',  name:'Carol',   role:'Apoio Operacional & Pedagógico', color:'#6FD3A4'},
+  {id:'mayara', name:'Mayara',  role:'Conteúdo · Social & Depoimentos', color:'#E07A8A'},
 ];
 const U=id=>USERS.find(u=>u.id===id)||{name:'?',color:'#999',role:''};
 const CATS={
@@ -626,92 +625,19 @@ const STATUSES=[['todo','A fazer','#9E998D'],['doing','Fazendo','#E2A33C'],['rev
 const STLABEL={todo:'A fazer',doing:'Fazendo',revisao:'Em revisão',done:'Feito'};
 const STORDER=['todo','doing','revisao','done'];
 const PRIOS={alta:{l:'Alta',c:'r'},media:{l:'Média',c:'a'},baixa:{l:'Baixa',c:'n'}};
-const SOPS={ vendas_abordagem:{t:'Exemplo de processo (passo a passo)',area:'comercial',passos:['Passo 1','Passo 2','Passo 3']} };
+const SOPS={
+  vendas_abordagem:{t:'Processo de vendas (modelo)',area:'comercial',passos:['Roteiro do processo de vendas — fica na versão privada do time.']},
+  vendas_objecoes:{t:'Árvore de objeções (modelo)',area:'comercial',passos:['Roteiro de objeções — versão privada.']},
+  lead_frio:{t:'Lead frio (modelo)',area:'comercial',passos:['Como atender lead frio — versão privada.']},
+  retencao:{t:'Retenção & cancelamento (modelo)',area:'comercial',passos:['Fluxo de retenção — versão privada.']},
+  repostagem:{t:'Repostar IG → TikTok / Shorts (modelo)',area:'conteudo',passos:['Passo a passo — versão privada.']},
+  trafego_subir:{t:'Subir campanha de tráfego (modelo)',area:'trafego',passos:['Passo a passo — versão privada.']},
+  manychat:{t:'Criar prompts do ManyChat (modelo)',area:'tecnico',passos:['Passo a passo — versão privada.']},
+  amazon_marcas:{t:'Rotina da Amazon (modelo)',area:'rotina',passos:['Passo a passo — versão privada.']},
+};
 
 function seed(){
-  if(PUBLISHED)return [];
-  return [
-    // Simoni — Expert
-    t('Gravar a Masterclass do lançamento','simoni',addDays(6),'lancamento',{review:true,prio:'alta',defPronto:'4 CPLs gravados, revisados e exportados na pasta do Drive.'}),
-    t('Aprovar o roteiro de vendas da Nati','simoni',todayISO(),'comercial',{dep:'nati'}),
-    t('Aprovar as fotos/criativos de IA','simoni',addDays(1),'conteudo',{dep:'mayara'}),
-    t('Fechar o orçamento de tráfego do lançamento','simoni',todayISO(),'lancamento',{dep:'fernanda'}),
-    t('Revisar a estratégia de conteúdo do mês','simoni',addDays(1),'conteudo',{dep:'ana'}),
-    t('Gravar conteúdo do mês em lote','simoni',addDays(8),'conteudo'),
-    t('Gravar banco de respostas do plantão técnico (FAQ)','simoni',addDays(3),'rotina'),
-    t('Refazer o webinário (mais enxuto / ao vivo, dados atuais) — pós-lançamento','simoni',addDays(25),'lancamento',{defPronto:'Webinário novo gravado/ao vivo, enxuto e com dados atualizados.'}),
-    // Ana — Gestão
-    t('Configurar a plataforma com o time','ana',todayISO(),'rotina',{status:'doing'}),
-    t('Reunião de onboarding (gravar)','ana',addDays(1),'rotina'),
-    t('Definir dono das tarefas órfãs da Mari','ana',todayISO(),'rotina'),
-    t('Montar o cronograma reverso do lançamento','ana',addDays(2),'lancamento'),
-    // Nati — Comercial / Vendas / Atendimento
-    t('Rotina diária de vendas (checklist)','nati',todayISO(),'comercial',{recur:true,prio:'alta',sop:'vendas_abordagem',subs:[
-      {t:'Verificar assinaturas manuais e cobranças pendentes',done:false},
-      {t:'Follow-up dos leads quentes (pediram valor/link)',done:false},
-      {t:'Follow-up dos leads mornos (interagiram, foram à masterclass)',done:false},
-      {t:'Follow-up de alguns leads frios/antigos',done:false},
-      {t:'Prospectar quem interagiu com stories/enquetes/comentários',done:false},
-      {t:'Responder leads (IG + WhatsApp) e comentários',done:false},
-      {t:'Verificar e-mails',done:false},
-      {t:'Responder alunos (WhatsApp + IG) e direcionar dúvidas',done:false},
-      {t:'Encaminhar dúvidas técnicas pra Simoni e postar a resposta na plataforma',done:false},
-      {t:'Confirmar com Mudrek antes de responder (lead/aluno/ex-aluno, produto, valor, ativo?)',done:false},
-      {t:'Verificar oportunidades de upgrade/renovação/retorno',done:false},
-      {t:'FINAL DO DIA: atualizar planilha + agenda + registrar objeções/condições/retornos',done:false},
-    ]}),
-    t('Vendas ativas: abordar 15+ leads do dia','nati',todayISO(),'comercial',{recur:true,prio:'alta',sop:'vendas_abordagem',defPronto:'15 leads abordados e registrados no pipeline com próximo follow-up.'}),
-    t('Responder inbox (IG/FB/TikTok/YT) + plataforma','nati',todayISO(),'comercial',{recur:true}),
-    t('Atualizar o calendário de vendas','nati',todayISO(),'comercial'),
-    t('Conferir vencimentos de anuidade + retenção','nati',addDays(1),'comercial',{recur:true}),
-    t('Finalizar as fotos de IA p/ aprovação','nati',todayISO(),'conteudo',{review:true,status:'revisao',reviewSince:addDays(-2),links:[{name:'Fotos no Drive',url:'https://drive.google.com/'}]}),
-    t('Produzir os 3 carrosséis da semana','nati',addDays(2),'conteudo',{prio:'media',campos:[{n:'Formato',v:'Carrossel'},{n:'Aprovado por',v:'Simoni'},{n:'Data de publicação',v:''}],subs:[{t:'Definir os 3 temas com base na linha editorial',done:true},{t:'Escrever a copy de cada carrossel',done:false},{t:'Montar as artes (capa + miolo)',done:false},{t:'Enviar pra Simoni aprovar',done:false}],links:[{name:'Linha editorial do mês (Drive)',url:'https://drive.google.com/'}],comments:[{u:'ana',t:'Seguir a linha editorial do mês (foco em renda em dólar). Capa com o gancho forte.',d:'28/05 18:42'},{u:'simoni',t:'Pode usar o print do resultado do aluno do módulo 3 🙌',d:'29/05 09:15'}]}),
-    // Vinicius (Mudrek) — Técnico / Dados / Criativos
-    t('Criar 20 prompts novos do ManyChat','mudrek',addDays(1),'tecnico',{sop:'manychat'}),
-    t('Configurar e rastrear as UTMs dos leads','mudrek',addDays(3),'tecnico',{review:true}),
-    t('Organizar os dados da Stripe e Hotmart','mudrek',addDays(2),'tecnico'),
-    t('Planilha-mãe de todos os leads/alunos','mudrek',addDays(4),'tecnico'),
-    t('Entregar criativos + roteiros de anúncio','mudrek',addDays(2),'trafego',{review:true,status:'revisao',reviewSince:todayISO()}),
-    // Fernanda — Tráfego pago
-    t('Subir a campanha de tráfego da Masterclass','fernanda',addDays(2),'trafego',{prio:'alta',sop:'trafego_subir'}),
-    t('Revisar criativos com o Vinicius','fernanda',todayISO(),'trafego',{review:true,status:'doing'}),
-    t('Relatório de tráfego da semana','fernanda',addDays(3),'trafego',{recur:true}),
-    t('Alinhar o orçamento do lançamento','fernanda',addDays(1),'trafego'),
-    // Mayara — Social / Conteúdo
-    t('Repostar IG → TikTok (5 do dia)','mayara',todayISO(),'conteudo',{recur:true,sop:'repostagem'}),
-    t('Repostar IG → YouTube Shorts (5 do dia)','mayara',todayISO(),'conteudo',{recur:true}),
-    t('Programar 1 carrossel no IG','mayara',todayISO(),'conteudo',{recur:true}),
-    t('Organizar o Drive do Time SI por tema','mayara',addDays(3),'rotina'),
-    // Carol — hoje: conteúdo VRD (colabora) + Amazon. Proposta: assumir parte da Mari
-    t('Colaborar na confecção dos carrosséis do IG','carol',todayISO(),'conteudo',{recur:true}),
-    t('Recortes e montagens dos depoimentos dos alunos (reuniões)','carol',addDays(2),'conteudo'),
-    t('Postar a Pizza Pública (escolhas da semana)','carol',todayISO(),'conteudo',{recur:true}),
-    t('Cobrar as tarefas do time na plataforma','carol',todayISO(),'rotina',{recur:true}),
-    t('Lembrar a postagem da pauta do dia','carol',todayISO(),'rotina',{recur:true}),
-    t('Coletar os acessos pendentes com a Simoni','carol',addDays(1),'rotina'),
-    t('Postar videoaulas / atualizar a Cademí','carol',addDays(2),'rotina'),
-    t('Redigir e-mails de notificação aos alunos','carol',addDays(3),'rotina'),
-    t('Gerar as capas de módulos com IA','carol',addDays(4),'rotina'),
-    t('Consolidar o status p/ a reunião de sexta','carol',addDays(2),'rotina',{recur:true}),
-    // Projeto Amazon (fora do VRD — Mayara + Carol)
-    t('Filtrar mensagens das marcas e passar pra Simoni','mayara',todayISO(),'rotina',{recur:true,proj:'amazon',prio:'alta',sop:'amazon_marcas'}),
-    t('Subir os vídeos da Simoni e gerar links de produto','mayara',todayISO(),'rotina',{recur:true,proj:'amazon'}),
-    t('Checar novas campanhas de cada marca (mensal)','mayara',addDays(5),'rotina',{recur:true,proj:'amazon'}),
-    t('Fazer os contatos do projeto Amazon','carol',todayISO(),'rotina',{recur:true,proj:'amazon'}),
-    // Pessoal da Simoni (proj 'pessoal' — só na aba Pessoal; cada um vê só o que a Simoni designar)
-    t('Agendar consulta médica da Simoni','carol',addDays(2),'rotina',{proj:'pessoal'}),
-    t('Comprar presente de aniversário (ver lista)','carol',addDays(4),'rotina',{proj:'pessoal'}),
-    t('Organizar a agenda pessoal da semana','mayara',addDays(1),'rotina',{proj:'pessoal'}),
-    t('Bloquear 1 dia/mês pra gravar conteúdo em lote','simoni',addDays(3),'rotina',{proj:'pessoal'}),
-    // Depoimentos (função exclusiva da Carol — recorte/montagem das reuniões ao vivo)
-    t('Depoimento da Andreza — reunião 03/06','carol',addDays(1),'conteudo',{proj:'depoimentos',prio:'media',campos:[{n:'Aluno',v:'Andreza Lemos'},{n:'Reunião',v:'03/06 ao vivo'},{n:'Duração final',v:'~45s'}],links:[{name:'Gravação bruta (Drive)',url:'https://drive.google.com/'}],subs:[{t:'Achar o trecho na gravação',done:true},{t:'Recortar e montar',done:false},{t:'Legendar',done:false},{t:'Enviar pra Simoni aprovar',done:false}]}),
-    t('Depoimento do Diógenes — reunião 03/06','carol',addDays(2),'conteudo',{proj:'depoimentos',status:'doing',campos:[{n:'Aluno',v:'Diógenes Moura'},{n:'Reunião',v:'03/06 ao vivo'}],links:[{name:'Gravação bruta (Drive)',url:'https://drive.google.com/'}]}),
-    t('Depoimento da Fernanda T. — reunião 27/05','carol',addDays(-1),'conteudo',{proj:'depoimentos',status:'revisao',review:true,reviewSince:addDays(-1),entrega:'https://drive.google.com/'}),
-    // dependências (a pessoa marca de quem depende → aparece no "Dia" do outro)
-    t('Montar a página do lançamento (preciso da copy)','ana',todayISO(),'lancamento',{dep:'simoni'}),
-    t('Postar os carrosséis da semana (preciso das artes)','mayara',todayISO(),'conteudo',{dep:'carol'}),
-    t('Abordar os leads novos (preciso da planilha)','nati',todayISO(),'comercial',{dep:'mudrek'}),
-  ];
+  return [];
 }
 let _id=1;
 function t(title,owner,due,cat,o={}){
@@ -744,22 +670,13 @@ function l(name,contact,source,stage,plano,last,next,note){
   return {id:'l'+(_lid++),name,contact,source,stage,plano:plano||'—',last,next,note:note||'',owner:'nati',comments:[],campos:[]};
 }
 function seedLeads(){
-  if(PUBLISHED)return [];
-  return [
-    l('Marina Alves','marina@email.com','Lista de espera','followup','US$ 797',addDays(-2),todayISO(),'Pediu pra retomar depois do dia 10. Follow-up de 7 dias.'),
-    l('Roberto Dias','+55 11 95xxx','Masterclass','dor','US$ 997',addDays(-1),todayISO(),'Em dúvida entre VRD e Premium. Trabalhando a escada do sim.'),
-    l('Camila Souza','camila@email.com','Instagram','novo','—',null,todayISO(),'Comentou "EU" no post do dólar. Primeiro contato.'),
-    l('André Castro','andre@email.com','Lista de espera','novo','—',null,todayISO(),'Entrou na lista hoje.'),
-    l('João Pedro','+55 21 98xxx','Indicação','oferta','US$ 1.297',addDays(-3),addDays(1),'Link enviado. Quer parcelar — confirmar condição.'),
-    l('Fernanda Lima','fe@email.com','Lista de espera','diagnostico','US$ 597',addDays(-5),addDays(2),'Em diagnóstico: entendendo o momento dela.'),
-    l('Lucas Martins','lucas@email.com','Masterclass','aluno','US$ 997',addDays(-7),null,'Fechou! Onboarding feito.'),
-    l('Patrícia Gomes','+55 31 99xxx','Instagram','perdido','—',addDays(-10),null,'Disse que não é o momento. Reabordar em 60 dias.'),
-  ];
+  // Pipeline começa vazio — a Nati cadastra os leads reais dela (botão "Novo lead").
+  return [];
 }
 
 function seedLaunch(){
   return {
-    nome:'Lançamento VRD — Operação Resgate',
+    nome:'Lançamento VRD',
     carrinho:'14/06 a 18/06',
     fases:[
       {nome:'Aquecimento',data:'02–08/06',status:'andamento'},
@@ -779,49 +696,27 @@ function seedLaunch(){
     ],
   };
 }
-function seedCofre(){ return [ {f:'Rede social',l:'—',n:'(exemplo)'},{f:'Ferramenta de e-mail',l:'—',n:'(exemplo)'},{f:'Plataforma do curso',l:'—',n:'(exemplo)'},{f:'Pagamentos',l:'—',n:'(exemplo)'} ]; }
+function seedCofre(){
+  return [
+    {f:'Acessos do time',l:'—',n:'A lista real de ferramentas e logins fica só na versão privada da Simoni.'},
+  ];
+}
 
 let S=load();
 function money(n){return 'R$ '+Number(n||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}
-function seedFinanceiro(){if(PUBLISHED)return {lancamentos:[],notas:'',meta:0};return {
-  meta:14000,
-  lancamentos:[
-    {id:'f1',desc:'Vendas VRD — Stripe/Hotmart',tipo:'entrada',valor:9408.92,venc:todayISO(),status:'pago',cat:'Vendas'},
-    {id:'f2',desc:'Renovações / anuidades',tipo:'entrada',valor:1980,venc:todayISO(),status:'pago',cat:'Renovação'},
-    {id:'f3',desc:'Consultoria individual',tipo:'entrada',valor:2500,venc:addDays(4),status:'pendente',cat:'Consultoria'},
-    {id:'f4',desc:'Verba de tráfego (Meta Ads)',tipo:'saida',valor:3000,venc:addDays(3),status:'pendente',cat:'Tráfego'},
-    {id:'f5',desc:'Pagamentos do time',tipo:'saida',valor:4200,venc:addDays(5),status:'pendente',cat:'Equipe'},
-    {id:'f6',desc:'Ferramentas (ManyChat, Cademí, Stripe...)',tipo:'saida',valor:680,venc:addDays(8),status:'pendente',cat:'Ferramentas'},
-    {id:'f7',desc:'Pró-labore Simoni',tipo:'saida',valor:5000,venc:addDays(10),status:'pendente',cat:'Pró-labore'},
-    {id:'f8',desc:'Impostos',tipo:'saida',valor:1400,venc:addDays(12),status:'pendente',cat:'Impostos'},
-    {id:'f9',desc:'Vendas VRD (mês passado)',tipo:'entrada',valor:11200,venc:addDays(-32),status:'pago',cat:'Vendas'},
-    {id:'f10',desc:'Tráfego (mês passado)',tipo:'saida',valor:3200,venc:addDays(-31),status:'pago',cat:'Tráfego'},
-    {id:'f11',desc:'Time (mês passado)',tipo:'saida',valor:4200,venc:addDays(-30),status:'pago',cat:'Equipe'},
-    {id:'f12',desc:'Ferramentas (mês passado)',tipo:'saida',valor:650,venc:addDays(-30),status:'pago',cat:'Ferramentas'},
-    {id:'f13',desc:'Vendas VRD (2 meses atrás)',tipo:'entrada',valor:8600,venc:addDays(-62),status:'pago',cat:'Vendas'},
-    {id:'f14',desc:'Custos do time (2 meses atrás)',tipo:'saida',valor:6800,venc:addDays(-60),status:'pago',cat:'Equipe'},
-  ],
+function seedFinanceiro(){return {
+  meta:0,
+  // Sem lançamentos de exemplo — a Simoni adiciona os números reais do negócio.
+  lancamentos:[],
   notas:'Espaço privado da Simoni. Lance aqui o que entra e o que sai do negócio. Só você vê. 🔒'
 };}
-function seedAulas(){if(PUBLISHED)return [];return [
-  {id:'a1',nome:'Reunião ao vivo · 03/06',data:'2026-06-03',gravacao:'https://drive.google.com/',
-   docs:[{name:'Roteiro da reunião',url:'https://drive.google.com/'},{name:'Lista de presença',url:'https://drive.google.com/'}],
-   cortes:[
-     {t:'Depoimento da Andreza',status:'editando',url:''},
-     {t:'Depoimento do Diógenes',status:'a fazer',url:''},
-     {t:'Dica rápida da Simoni (corte pra reels)',status:'a fazer',url:''},
-   ]},
-  {id:'a2',nome:'Reunião ao vivo · 27/05',data:'2026-05-27',gravacao:'https://drive.google.com/',
-   docs:[],
-   cortes:[{t:'Depoimento da Fernanda T.',status:'pronto',url:'https://drive.google.com/'}]},
-];}
-function seedPessoal(){if(PUBLISHED)return {notas:'',items:[]};return {
+function seedAulas(){
+  // Acervo começa vazio — a Mayara cadastra as aulas/reuniões reais (botão "Nova aula").
+  return [];
+}
+function seedPessoal(){return {
   notas:'Seu espaço só seu, Simoni 🌿 — anotações, ideias e lembretes que não são do time.',
-  items:[
-    {t:'Bloquear 1 dia/mês pra gravar conteúdo em lote',done:false},
-    {t:'Cuidar da agenda pessoal / consultas',done:false},
-    {t:'Estudar 1h de mercado por semana',done:true},
-  ]
+  items:[]
 };}
 function load(){
   try{const r=JSON.parse(localStorage.getItem(KEY));if(r&&r.tasks){if(!r.financeiro)r.financeiro=seedFinanceiro();if(!r.pessoal)r.pessoal=seedPessoal();if(!r.stages)r.stages=seedStages();if(!r.aulas)r.aulas=seedAulas();return r}}catch(e){}
@@ -865,8 +760,8 @@ const TABS=[
   {id:'hubvrd',label:'Hub VRD', short:'Hub', icon:'<rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="5" rx="1.5"/><rect x="13" y="10" width="8" height="11" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/>', allow:['simoni','ana','mudrek','fernanda']},
   {id:'vendas',label:'Vendas',icon:'<path d="M4 5h16l-6 7v5l-4 2v-7z"/>', allow:['ana','simoni','nati','fernanda','mudrek']},
   {id:'posvenda',label:'Pós-venda', short:'Pós', icon:'<circle cx="9" cy="8" r="3.5"/><path d="M3.5 20c0-3 2.5-5.5 5.5-5.5"/><path d="M14.5 13.5l2 2 4-4"/>', allow:['ana','simoni','nati','fernanda','mudrek']},
-  {id:'depoimentos',label:'Depoimentos', short:'Vídeos', icon:'<rect x="2.5" y="6" width="13" height="12" rx="2"/><path d="M16 10l5-3v10l-5-3z"/>', allow:['carol','ana','simoni']},
-  {id:'amazon',label:'Projeto Amazon', short:'Amazon', icon:'<path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8.5"/>', allow:['simoni','carol','mayara']},
+  {id:'depoimentos',label:'Depoimentos', short:'Vídeos', icon:'<rect x="2.5" y="6" width="13" height="12" rx="2"/><path d="M16 10l5-3v10l-5-3z"/>', allow:['mayara','ana','simoni']},
+  {id:'amazon',label:'Projeto Amazon', short:'Amazon', icon:'<path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8.5"/>', allow:['simoni','mayara','ana']},
   {id:'pessoal',label:'Pessoal', short:'Pessoal', icon:'<path d="M12 21C7.5 17.5 4 14 4 9.8 4 7.1 6 5 8.6 5c1.6 0 3 .9 3.4 2.2C12.4 5.9 13.8 5 15.4 5 18 5 20 7.1 20 9.8c0 4.2-3.5 7.7-8 11.2z"/>', allow:['simoni']},
   {id:'financeiro',label:'Financeiro', short:'Financ.', icon:'<path d="M12 3v18"/><path d="M16 7.5C16 5.6 14.2 4.5 12 4.5S8 5.6 8 7.5s1.8 3 4 3 4 1.1 4 3-1.8 3-4 3-4-1.1-4-3"/>', allow:['simoni']},
   {id:'guia',  label:'Guia',  icon:'<path d="M4 19V5a2 2 0 0 1 2-2h11v18H6a2 2 0 0 1-2-2z"/><path d="M17 3v18"/>'},
@@ -912,11 +807,11 @@ function render(){
   const fab=$('#fab');
   const vsub=S.vendaSub||'geral';
   const depoBib=S.tab==='depoimentos'&&(S.depoView||'biblioteca')==='biblioteca';
-  const showFab=S.tab==='tarefas'||S.tab==='amazon'||S.tab==='depoimentos'||(S.tab==='pessoal'&&S.current==='simoni')||(S.tab==='vendas'&&['geral','pipeline'].includes(vsub));
+  const showFab=S.tab==='tarefas'||S.tab==='depoimentos'||(S.tab==='pessoal'&&S.current==='simoni')||(S.tab==='vendas'&&['geral','pipeline'].includes(vsub));
   fab.style.display=showFab?'flex':'none';
   const isLead=(S.tab==='vendas'&&['geral','pipeline'].includes(vsub));
   fab.querySelector('.fablabel').textContent=isLead?'Novo lead':(depoBib?'Nova aula':(S.tab==='depoimentos'?'Novo depoimento':'Nova tarefa'));
-  fab.onclick=isLead?openNewLead:(depoBib?()=>{const a={id:'au'+Date.now(),nome:'',data:todayISO(),gravacao:'',docs:[],cortes:[]};S.aulas=S.aulas||[];S.aulas.unshift(a);save();openAula(a)}:()=>{draft={title:'',owner:S.tab==='depoimentos'?'carol':S.current,due:todayISO(),cat:S.tab==='depoimentos'?'conteudo':'rotina',review:false,recur:false,dep:'',prio:null,defPronto:'',subs:[],links:[],proj:S.tab==='amazon'?'amazon':(S.tab==='pessoal'?'pessoal':(S.tab==='depoimentos'?'depoimentos':'vrd'))};openNew()});
+  fab.onclick=isLead?openNewLead:(depoBib?()=>{const a={id:'au'+Date.now(),nome:'',data:todayISO(),gravacao:'',docs:[],cortes:[]};S.aulas=S.aulas||[];S.aulas.unshift(a);save();openAula(a)}:()=>{draft={title:'',owner:S.tab==='depoimentos'?'mayara':S.current,due:todayISO(),cat:S.tab==='depoimentos'?'conteudo':'rotina',review:false,recur:false,dep:'',prio:null,defPronto:'',subs:[],links:[],proj:S.tab==='amazon'?'amazon':(S.tab==='pessoal'?'pessoal':(S.tab==='depoimentos'?'depoimentos':'vrd'))};openNew()});
   ({hoje:vHoje,tarefas:vTarefas,vendas:vVendas,posvenda:vPosVenda,amazon:vAmazon,depoimentos:vDepoimentos,hubvrd:vHub,admin:vAdmin,financeiro:vFinanceiro,pessoal:vPessoal,guia:vGuia}[S.tab]||vHoje)(v);
   v.scrollTop=0;
 }
@@ -1369,26 +1264,15 @@ function painelBody(v){
 /* ---- PROJETO AMAZON (separado do VRD) ---- */
 function vAmazon(v){
   v.appendChild(el('div','pagehead',`<div class="k">Projeto à parte · fora do VRD</div><h2>Projeto Amazon</h2>
-    <p>A parceria de marcas/afiliados da Simoni na Amazon. Separado do VRD — quem cuida aqui é a Mayara e a Carol.</p>`));
-  v.appendChild(el('div','note','Rotina: filtrar mensagens das marcas → passar pra Simoni no grupo → 1×/mês checar novas campanhas → subir vídeos da Simoni e gerar links de produto.'));
-  v.appendChild(ctrlRow('Ver',viewToggle('amazonMode','board',[['cal','▦ Calendário'],['board','▤ Quadro'],['list','☰ Lista']])));
-  v.appendChild(ctrlRow('Pessoa',personFilter('amazonFilter',['mayara','carol','simoni'])));
-  let list=S.tasks.filter(x=>x.proj==='amazon');
-  const af=S.amazonFilter||'all';
-  if(af!=='all')list=list.filter(x=>x.owner===af);
-  if(!list.length){
-    v.appendChild(el('div','empty',`<div class="e">📦</div><div class="h">Nenhuma tarefa da Amazon aqui</div><div class="s">Toque em "+ Nova tarefa" pra adicionar (dá pra designar pra quem quiser).</div>`));
-    return;
-  }
-  const mode=S.amazonMode||'board';
-  if(mode==='cal'){renderCalendar(v,list);return}
-  if(mode==='list'){agendaList(v,list);return}
-  taskBoard(v,list);
+    <p>A parceria de marcas/afiliados da Simoni na Amazon (renda extra de comissões). Separado do VRD.</p>`));
+  // Pausado durante o lançamento (decisão Simoni · 09/06). Aba fica "bloqueada", volta depois.
+  v.appendChild(el('div','empty',`<div class="e">⏸️</div><div class="h">Projeto Amazon pausado</div>
+    <div class="s">Decidimos parar a Amazon enquanto o foco é o lançamento do VRD. A aba fica aqui, guardada, e a gente retoma quando voltar a prospectar as marcas. 🔒</div>`));
 }
 
-/* ---- DEPOIMENTOS (função exclusiva da Carol) ---- */
+/* ---- DEPOIMENTOS (recorte/montagem dos vídeos das lives — Mayara) ---- */
 function vDepoimentos(v){
-  v.appendChild(el('div','pagehead',`<div class="k">Conteúdo · função da Carol</div><h2>Depoimentos & aulas</h2>
+  v.appendChild(el('div','pagehead',`<div class="k">Conteúdo · função da Mayara</div><h2>Depoimentos & aulas</h2>
     <p>Acervo dos vídeos das reuniões ao vivo, organizado por aula — com a gravação, os documentos e os cortes (depoimentos/trechos) de cada uma.</p>`));
   v.appendChild(viewToggle('depoView','biblioteca',[['biblioteca','🎞️ Biblioteca por aula'],['tarefas','📋 Quadro de edição']]));
   if((S.depoView||'biblioteca')==='tarefas'){
@@ -1619,12 +1503,11 @@ function vGuia(v){
     <p>O combinado que faz a plataforma funcionar. 2 minutos de leitura.</p>`));
 
   let roles='';
-  USERS.forEach(u=>{roles+=`<div class="r">${av(u,'av')}<div><div class="rn">${u.name}</div><div class="rr">${u.role}</div>
-    ${u.id==='carol'?'<div class="tag">papel proposto — a aprovar</div>':''}</div></div>`});
+  USERS.forEach(u=>{roles+=`<div class="r">${av(u,'av')}<div><div class="rn">${u.name}</div><div class="rr">${u.role}</div></div></div>`});
   v.appendChild(el('div','gcard',`<h3><span class="em">👥</span> Quem faz o quê</h3>
     <p class="sub">Cada pessoa, um dono. Acabou o "todo mundo sabe de tudo, ninguém faz".</p>
     <div class="rolelist">${roles}</div>
-    <div class="note" style="margin-top:12px"><b>Redistribuição proposta (a Mari saiu):</b> Carol assume apoio pedagógico, e-mails e capas. <b>Plantão técnico de investimentos</b> → a Simoni grava um FAQ e o time responde com base nele (escala o que não souber). Falta dono fixo de design/edição.</div>`));
+    <div class="note" style="margin-top:12px"><b>Reestruturação (jun/2026):</b> a Mayara assume os <b>depoimentos</b> (recorte dos vídeos das lives) além do conteúdo/social. O <b>Projeto Amazon</b> está pausado durante o lançamento. <b>Plantão técnico de investimentos</b> → a Simoni grava um FAQ uma vez e o time responde com base nele (escala o que não souber).</div>`));
 
   v.appendChild(el('div','gcard',`<h3><span class="em">✅</span> Definição de Pronto</h3>
     <p class="sub">Uma tarefa só vira "Feito" quando:</p>
@@ -1710,163 +1593,105 @@ function vHub(v){
   if((S.hubTab||'metricas')==='lancamento'){hubLancamento(v);return}
   v.appendChild(subNav(HUBSECTIONS,'hubSub','resumo'));
   ({resumo:hubResumo,aquisicao:hubAquisicao,metaads:hubMetaAds,pesquisa:hubPesquisa,vendas:hubVendas,recuperacao:hubRecuperacao,reembolsos:hubReembolsos,assinaturas:hubAssinaturas,clientes:hubClientes,produtos:hubProdutos}[S.hubSub||'resumo']||hubResumo)(v);
-  v.appendChild(el('div','note',`Hub com <b>dados de exemplo</b>. Pra ficar ao vivo, conecta nos webhooks de <b>Stripe / Hotmart / Assiny</b>. Monto quando você quiser.`));
+  v.appendChild(el('div','note',`Esta é a <b>estrutura</b> do Hub — os números reais entram quando a gente conectar os <b>webhooks de Stripe / Hotmart / Assiny</b> (fase de back-end) ou a Simoni inserir os dados. Monto a conexão quando você quiser.`));
 }
+/* Hub métricas: estrutura visível com placeholders — os números reais entram quando
+   conectar os dados (Stripe/Hotmart/Assiny) ou a Simoni preencher. Sem dados fictícios. */
+function hubEmpty(msg){return el('div','empty',`<div class="e">📊</div><div class="h">Sem dados ainda</div><div class="s">${msg||'Os números reais aparecem aqui quando a gente conectar Stripe / Hotmart / Assiny (ou a Simoni inserir os dados).'}</div>`)}
 function hubResumo(v){
   v.appendChild(periodChips(0));
   v.appendChild(kpiGrid([
-    {l:'Receita no período',n:'R$ 147,20',s:'Hoje',color:'var(--green)'},
-    {l:'Receita de renovações',n:'R$ 0,00',s:'Hoje · ciclo > 1'},
-    {l:'Receita acumulada',n:'R$ 9.408,92',s:'Histórico completo',gold:true},
-    {l:'Novos alunos',n:'2',s:'Cadastrados hoje'},
-    {l:'Vendas no período',n:'3',s:'Hoje'},
-    {l:'Produtos',n:'20',s:'Ativos'},
-    {l:'Assinaturas',n:'21',s:'Ativas'},
-    {l:'Acessos',n:'17',s:'Liberados'},
-    {l:'Clientes',n:'76',s:'Total'},
+    {l:'Receita no período',n:'—',s:'Hoje',color:'var(--green)'},
+    {l:'Receita de renovações',n:'—',s:'Hoje · ciclo > 1'},
+    {l:'Receita acumulada',n:'—',s:'Histórico completo',gold:true},
+    {l:'Novos alunos',n:'—',s:'Cadastrados hoje'},
+    {l:'Vendas no período',n:'—',s:'Hoje'},
+    {l:'Produtos',n:'—',s:'Ativos'},
+    {l:'Assinaturas',n:'—',s:'Ativas'},
+    {l:'Acessos',n:'—',s:'Liberados'},
+    {l:'Clientes',n:'—',s:'Total'},
   ]));
-  const cols=el('div','hubcols');
-  const sc=el('div','hubcard');sc.appendChild(el('div','hubh',`Vendas recentes <span>últimas 5</span>`));
-  [['Operação Resgate','madalenagarcia710@gmail.com','R$ 67,00','03/06 · 08:45'],
-   ['[OR] Acesso Vitalício','madalenagarcia710@gmail.com','R$ 19,90','03/06 · 08:45'],
-   ['Operação Resgate','raniery2026@gmail.com','R$ 60,30','03/06 · 07:37'],
-   ['Operação Resgate','maury.silva.sp@gmail.com','R$ 60,30','02/06 · 21:49'],
-   ['Operação Resgate','patricksandim@gmail.com','R$ 60,30','02/06 · 16:25']].forEach(s=>{const r=el('div','saler');r.innerHTML=`<div><div class="sp">${esc(s[0])} ${tag('Pago','g')}</div><div class="se">${esc(s[1])}</div></div><div class="sr"><div class="sv">${s[2]}</div><div class="sd">${s[3]}</div></div>`;sc.appendChild(r)});
-  cols.appendChild(sc);
-  const ec=el('div','hubcard');ec.appendChild(el('div','hubh',`Eventos <span>tempo real</span>`));
-  [['webhook.received','19:15','#E2A33C'],['provisioning.skipped','18:23','#E2A33C'],['webhook.processed','18:23','#9E998D'],['webhook.received','18:23','#9E998D'],['provisioning.skipped','17:02','#E2A33C'],['webhook.processed','17:02','#9E998D']].forEach(e=>{const r=el('div','evr');r.innerHTML=`<span class="evdot" style="background:${e[2]}"></span><span class="evt">${esc(e[0])}</span><span class="evts">${e[1]}</span>`;ec.appendChild(r)});
-  cols.appendChild(ec);v.appendChild(cols);
+  v.appendChild(hubEmpty('Vendas recentes e eventos aparecem aqui assim que os pagamentos forem conectados.'));
 }
 function hubAquisicao(v){
   v.appendChild(periodChips(3));
   v.appendChild(kpiGrid([
-    {l:'Faturamento',n:'R$ 9.408,92',s:'Vendas pagas',color:'var(--green)'},
-    {l:'Reembolsos',n:'R$ 1.286,40',s:'13,67% do faturamento'},
-    {l:'Margem de contribuição',n:'R$ 2.684,28',s:'28,53%',gold:true},
-    {l:'Compradores únicos',n:'76',s:'No período'},
-    {l:'Ticket médio',n:'R$ 123,80',s:'Receita ÷ compradores'},
-    {l:'Investimento',n:'R$ 5.203,01',s:'Spend + imposto'},
-    {l:'Imposto Meta (12,5%)',n:'R$ 578,11'},
-    {l:'ROAS',n:'2,03',s:'Receita ÷ Spend Meta'},
-    {l:'ROI',n:'1,73'},
-    {l:'CPA',n:'R$ 68,46',s:'Investimento ÷ compradores'},
+    {l:'Faturamento',n:'—',s:'Vendas pagas',color:'var(--green)'},
+    {l:'Reembolsos',n:'—',s:'do faturamento'},
+    {l:'Margem de contribuição',n:'—',gold:true},
+    {l:'Compradores únicos',n:'—',s:'No período'},
+    {l:'Ticket médio',n:'—',s:'Receita ÷ compradores'},
+    {l:'Investimento',n:'—',s:'Spend + imposto'},
+    {l:'Imposto Meta (12,5%)',n:'—'},
+    {l:'ROAS',n:'—',s:'Receita ÷ Spend Meta'},
+    {l:'ROI',n:'—'},
+    {l:'CPA',n:'—',s:'Investimento ÷ compradores'},
   ]));
-  v.appendChild(hubTableCard('Por produto','6 produtos',
-    [{h:'Produto'},{h:'Vendas',r:1},{h:'Receita',r:1},{h:'Reembolsos',r:1},{h:'% Reemb.',r:1}],
-    [['Operação Resgate','94','R$ 6.056,80','R$ 1.286,40',`<span style="color:var(--amber)">21,24%</span>`],
-     ['100 Ofertas Vencedoras p/ Clonar IA','17','R$ 1.140,10','—',`<span style="color:var(--green)">0%</span>`],
-     ['[OR] Acesso Vitalício','12','R$ 238,80','—',`<span style="color:var(--green)">0%</span>`],
-     ['Acompanhamento Intensivo 90 Dias','3','R$ 891,00','—',`<span style="color:var(--green)">0%</span>`]]));
+  v.appendChild(hubEmpty('A quebra por produto entra aqui quando os dados de venda forem conectados.'));
 }
 function hubMetaAds(v){
   v.appendChild(periodChips(3));
   v.appendChild(kpiGrid([
-    {l:'Investimento',n:'R$ 4.840,47',s:'85.694 impressões',color:'var(--green)'},
-    {l:'Receita atribuída',n:'R$ 8.432,02',s:'71 vendas'},
-    {l:'ROAS',n:'1,74',s:'Receita ÷ Spend',gold:true},
-    {l:'CPC médio',n:'R$ 0,94',s:'CTR 6,01% · LPVs 1.627'},
+    {l:'Investimento',n:'—',s:'impressões',color:'var(--green)'},
+    {l:'Receita atribuída',n:'—',s:'vendas'},
+    {l:'ROAS',n:'—',s:'Receita ÷ Spend',gold:true},
+    {l:'CPC médio',n:'—',s:'CTR · LPVs'},
   ]));
-  v.appendChild(hubTableCard('Campanhas','11 campanhas',
-    [{h:'Campanha'},{h:'Spend',r:1},{h:'Receita',r:1},{h:'ROAS',r:1},{h:'Vendas',r:1},{h:'CPA',r:1}],
-    [['01. [OR] [TESTE-CRIATIVOS] REMESSA 01','R$ 2.449,77',`<span style="color:var(--green)">R$ 2.497,67</span>`,'1,02','26','R$ 94,22'],
-     ['[Campanha de Validação] - Opção 02','R$ 529,92',`<span style="color:var(--green)">R$ 2.944,73</span>`,'5,56','22','R$ 24,09'],
-     ['[Campanha de Validação] - Opção 03','R$ 477,25',`<span style="color:var(--green)">R$ 1.493,28</span>`,'3,13','11','R$ 43,39'],
-     ['02. [OR] [TESTE-CRIATIVOS] [CBO]','R$ 305,62',`<span style="color:var(--green)">R$ 725,94</span>`,'2,38','4','R$ 76,41'],
-     ['05. [OR] REMESSA FINCH+UGC','R$ 238,02',`<span style="color:var(--amber)">R$ 134,00</span>`,'0,56','2','R$ 119,01']]));
+  v.appendChild(hubEmpty('As campanhas e o desempenho do Meta Ads aparecem aqui quando a Fernanda conectar a conta de anúncios.'));
 }
 function hubPesquisa(v){
   v.appendChild(kpiGrid([
-    {l:'Respostas (últimas 500)',n:'87'},
-    {l:'Únicas por contato',n:'64'},
-    {l:'Respostas válidas',n:'62',s:'bate com a base',color:'var(--green)'},
-    {l:'% Conversão',n:'96,9%',s:'válidas ÷ únicas'},
-    {l:'% Conv. alunos',n:'81,6%',s:'62 ÷ 76 alunos',color:'var(--green)'},
-    {l:'Não classificados',n:'0'},
+    {l:'Respostas (últimas 500)',n:'—'},
+    {l:'Únicas por contato',n:'—'},
+    {l:'Respostas válidas',n:'—',s:'bate com a base',color:'var(--green)'},
+    {l:'% Conversão',n:'—',s:'válidas ÷ únicas'},
+    {l:'% Conv. alunos',n:'—',color:'var(--green)'},
+    {l:'Não classificados',n:'—'},
   ]));
-  v.appendChild(seclab('Classificação dos compradores · base 62'));
+  v.appendChild(seclab('Classificação dos compradores'));
   v.appendChild(kpiGrid([
-    {l:'Lead A',n:'0',s:'0,0%'},{l:'Lead B',n:'4',s:'6,5%',color:'#8CC8E2'},
-    {l:'Lead C',n:'17',s:'27,4%',color:'var(--amber)'},{l:'Lead D',n:'31',s:'50,0%'},{l:'Lead E',n:'10',s:'16,1%'},
+    {l:'Lead A',n:'—'},{l:'Lead B',n:'—',color:'#8CC8E2'},
+    {l:'Lead C',n:'—',color:'var(--amber)'},{l:'Lead D',n:'—'},{l:'Lead E',n:'—'},
   ]));
-  v.appendChild(hubTableCard('Respostas','últimas 500',
-    [{h:'Quando'},{h:'Contato'},{h:'Form'},{h:'Lead'}],
-    [['03/06 14:30','maury.silva.sp@gmail.com','[OR] - Pesquisa 01',tag('Lead E','n')],
-     ['03/06 11:05','raniery2026@gmail.com','[OR] - Pesquisa 01',tag('Lead C','a')],
-     ['03/06 09:40','joaohuve@hotmail.com','[OR] - Pesquisa 01',tag('Lead D','n')],
-     ['03/06 09:25','madalenagarcia710@gmail.com','[OR] - Pesquisa 01',tag('Lead D','n')]]));
+  v.appendChild(hubEmpty('As respostas da pesquisa entram aqui quando o formulário de qualificação for conectado.'));
 }
 function hubVendas(v){
-  const head=el('div','hubtotals');head.innerHTML=`${tag('R$ 3.157,67 pagos','g')} ${tag('R$ 321,60 estornados','a')}`;v.appendChild(head);
-  v.appendChild(hubTableCard('Vendas','mais recentes',
-    [{h:'Cliente'},{h:'Valor',r:1},{h:'Status'},{h:'Pagamento'},{h:'Produto'},{h:'Origem'},{h:'Data'}],
-    [['MARIA MADALENA GARCIA','R$ 67,00',tag('Pago','g'),'PIX','Operação Resgate','FB','03/06 08:45'],
-     ['MARIA MADALENA GARCIA','R$ 19,90',tag('Pago','g'),'TRANSACTION','[OR] Acesso Vitalício','FB','03/06 08:45'],
-     ['Raniery Sousa','R$ 60,30',tag('Pago','g'),'PIX','Operação Resgate','FB','03/06 07:37'],
-     ['Maury Silva','R$ 60,30',tag('Pago','g'),'PIX','Operação Resgate','FB','02/06 21:49'],
-     ['Lilian de Magalhães','R$ 297,00',tag('Pago','g'),'Cartão','Acompanhamento 90 Dias','direct','02/06 16:02'],
-     ['Sheila Fonseca','R$ 67,00',tag('Pago','g'),'Cartão','Operação Resgate','FB','02/06 15:37']]));
+  const head=el('div','hubtotals');head.innerHTML=`${tag('R$ — pagos','g')} ${tag('R$ — estornados','a')}`;v.appendChild(head);
+  v.appendChild(hubEmpty('Cada venda aparece aqui (cliente, valor, produto, origem) quando os pagamentos forem conectados.'));
 }
 function hubRecuperacao(v){
   v.appendChild(periodChips(3));
   v.appendChild(kpiGrid([
-    {l:'Em aberto',n:'R$ 13,04',s:'6 aguardando pagamento'},
-    {l:'Expirado',n:'R$ 1.474,11',s:'16 expiraram sem pagar',color:'var(--amber)'},
-    {l:'Carrinho abandonado',n:'52',s:'saíram sem pagar'},
-    {l:'Total perdido',n:'R$ 5.218,11',s:'expirado + abandonado',color:'#F0897C',gold:true},
+    {l:'Em aberto',n:'—',s:'aguardando pagamento'},
+    {l:'Expirado',n:'—',s:'expiraram sem pagar',color:'var(--amber)'},
+    {l:'Carrinho abandonado',n:'—',s:'saíram sem pagar'},
+    {l:'Total perdido',n:'—',s:'expirado + abandonado',color:'#F0897C',gold:true},
   ]));
-  v.appendChild(hubTableCard('Recuperáveis','PIX/boleto pendente, expirado e abandonado',
-    [{h:'Quando'},{h:'Status'},{h:'Cliente'},{h:'Valor',r:1},{h:'Ação'}],
-    [['há 10h',tag('Abandonado','n'),'awf1204@hotmail.com','R$ 67,00',`<span style="color:var(--green)">WhatsApp</span>`],
-     ['há 11h',tag('PIX aguardando','a'),'madalenagarcia710@gmail.com','R$ 86,90',`<span style="color:var(--green)">WhatsApp</span>`],
-     ['há 20h',tag('Abandonado','n'),'contatogabrielarantes@hotmail.com','R$ 67,00',`<span style="color:var(--green)">WhatsApp</span>`],
-     ['há 20h',tag('PIX expirado','r'),'almeidanicolle892@gmail.com','R$ 60,30',`<span style="color:var(--green)">WhatsApp</span>`]]));
+  v.appendChild(hubEmpty('Os carrinhos abandonados e PIX/boletos pendentes (recuperáveis pela Nati) aparecem aqui quando conectar os pagamentos.'));
 }
 function hubReembolsos(v){
   v.appendChild(periodChips(3));
   v.appendChild(kpiGrid([
-    {l:'Reembolsado',n:'R$ 1.286,40',s:'20 estornos',color:'#F0897C'},
-    {l:'Chargeback',n:'R$ 97,00',s:'1 caso',color:'#F0897C'},
-    {l:'Total perdido',n:'R$ 1.383,40',s:'reembolsos + chargebacks',gold:true},
-    {l:'Taxa de reembolso',n:'22,37%',s:'17 de 76 alunos'},
+    {l:'Reembolsado',n:'—',s:'estornos',color:'#F0897C'},
+    {l:'Chargeback',n:'—',color:'#F0897C'},
+    {l:'Total perdido',n:'—',s:'reembolsos + chargebacks',gold:true},
+    {l:'Taxa de reembolso',n:'—'},
   ]));
-  v.appendChild(hubTableCard('Reembolsos & chargebacks','receita perdida pós-venda',
-    [{h:'Quando'},{h:'Status'},{h:'Cliente'},{h:'Produto'},{h:'Valor',r:1}],
-    [['há 1d',tag('Reembolso','a'),'bandadasacada@gmail.com','Operação Resgate','R$ 67,00'],
-     ['há 2d',tag('Reembolso','a'),'luizfe3006@gmail.com','Operação Resgate','R$ 67,00'],
-     ['há 3d',tag('Chargeback','r'),'r.novaes07@gmail.com','Instagram Automático','R$ 97,00'],
-     ['há 3d',tag('Reembolso','a'),'wandersonm931@gmail.com','Operação Resgate','R$ 67,00']]));
+  v.appendChild(hubEmpty('Reembolsos e chargebacks aparecem aqui quando os pagamentos forem conectados.'));
 }
 function hubAssinaturas(v){
   v.appendChild(kpiGrid([
-    {l:'Ativas',n:'21',color:'var(--green)'},{l:'Renovam em ≤7d',n:'0'},{l:'Atrasadas',n:'0'},{l:'Canceladas',n:'0'},
+    {l:'Ativas',n:'—',color:'var(--green)'},{l:'Renovam em ≤7d',n:'—'},{l:'Atrasadas',n:'—'},{l:'Canceladas',n:'—'},
   ]));
-  v.appendChild(hubTableCard('Assinaturas','21 · cobranças recorrentes',
-    [{h:'Cliente'},{h:'Produto'},{h:'Gateway'},{h:'Status'},{h:'Iniciada',r:1}],
-    [['Jefferson Franco','[OR] Acesso Vitalício','ASSINY',tag('Ativa','g'),'29/05'],
-     ['Thamires Machado','[OR] Acesso Vitalício','ASSINY',tag('Ativa','g'),'29/05'],
-     ['Ruth De Sousa','100 Ofertas Vencedoras','ASSINY',tag('Ativa','g'),'29/05'],
-     ['claudio silva','[OR] Acesso Vitalício','ASSINY',tag('Ativa','g'),'29/05'],
-     ['Joel Regis','100 Ofertas Vencedoras','ASSINY',tag('Ativa','g'),'29/05']]));
+  v.appendChild(hubEmpty('As assinaturas e cobranças recorrentes aparecem aqui quando conectar o gateway.'));
 }
 function hubClientes(v){
-  v.appendChild(seclab('76 clientes · mais recentes'));
-  v.appendChild(hubTableCard('Clientes','quem comprou, quanto gastou, acessos',
-    [{h:'Cliente'},{h:'Source'},{h:'Vendas',r:1},{h:'Total gasto',r:1},{h:'Acessos'},{h:'Desde',r:1}],
-    [['madalenagarcia710@gmail.com','ASSINY','2','R$ 86,90','nenhum','03/06'],
-     ['raniery2026@gmail.com','ASSINY','1','R$ 60,30','nenhum','03/06'],
-     ['patricksandim@gmail.com','ASSINY','2','R$ 120,60',tag('1','g'),'02/06'],
-     ['lilianjeejoao@hotmail.com','ASSINY','4','R$ 454,81',tag('1','g'),'02/06'],
-     ['leandrodacruz665@gmail.com','ASSINY','3','R$ 87,20','nenhum','02/06']]));
+  v.appendChild(seclab('Clientes'));
+  v.appendChild(hubEmpty('A base de clientes (quem comprou, quanto gastou, acessos) aparece aqui quando os dados forem conectados.'));
 }
 function hubProdutos(v){
-  v.appendChild(seclab('Catálogo · 9 ativos · 11 aguardando configuração'));
-  const grid=el('div','prodgrid');
-  [['[OR] Acesso Vitalício e Atualizações','ativo','Avulso'],['100 Ofertas Vencedoras p/ Clonar com IA','ativo','SaaS'],
-   ['Acompanhamento Intensivo de 30 Dias','ativo','Avulso'],['Operação Resgate','ativo','Avulso'],
-   ['ChatGPT Masters','config','Avulso'],['Formação Magic','config','SaaS'],
-   ['Método Primeira Venda em 7 Dias','config','Avulso'],['Sua Primeira Loja Online em 7 Dias','config','SaaS']]
-   .forEach(p=>{const c=el('div','prodcard');c.innerHTML=`<div class="pn2">${esc(p[0])}</div><div class="ptags">${p[1]==='ativo'?tag('Ativo','g'):tag('Aguardando config','a')} ${tag(p[2],'n')}</div>`;grid.appendChild(c)});
-  v.appendChild(grid);
+  v.appendChild(seclab('Catálogo de produtos'));
+  v.appendChild(hubEmpty('Os produtos do VRD aparecem aqui quando a Simoni cadastrar / conectar a plataforma do curso.'));
 }
 
 function hubLancamento(v){
@@ -1942,15 +1767,14 @@ function admExecucoes(v){
 }
 function admEquipe(v){
   v.appendChild(el('div','note','Quem tem acesso à plataforma e em que nível. Você (Ana) gerencia aqui — convidar, editar nível e remover.'));
-  v.appendChild(hubTableCard('Pessoas com acesso','7 pessoas',
+  v.appendChild(hubTableCard('Pessoas com acesso','6 pessoas',
     [{h:'Pessoa'},{h:'Nível'},{h:'Vê o quê'}],
     [['Ana (você)',tag('Admin','r'),'Tudo + Admin'],
      ['Simoni',tag('Gestão','b'),'Tudo + Admin'],
      ['Mudrek',tag('Membro','n'),'Tarefas · Vendas · Pós-venda · Hub VRD'],
      ['Fernanda',tag('Membro','n'),'Tarefas · Vendas · Pós-venda · Hub VRD'],
      ['Nati',tag('Membro','n'),'Tarefas · Vendas · Pós-venda'],
-     ['Carol',tag('Membro','n'),'Só tarefas'],
-     ['Mayara',tag('Membro','n'),'Só tarefas']]));
+     ['Mayara',tag('Membro','n'),'Tarefas · Depoimentos']]));
 }
 function admAuditoria(v){
   v.appendChild(el('div','note','Trilha completa de quem fez o quê e quando. Não-editável.'));
@@ -2204,7 +2028,14 @@ function vVendas(v){
   ({geral:vVendaGeral,pipeline:vVendaPipeline,mensagens:vVendaMensagens,documentos:vVendaDocs}[sub]||vVendaGeral)(v);
 }
 /* Biblioteca de mensagens prontas (copiar e colar) — baseada no processo da Nati */
-const MSGS=[ {cat:'Exemplo de categoria',items:[{t:'Modelo de mensagem',m:'Escreva aqui um modelo pronto para copiar e colar no atendimento.'}]} ];
+const MSGS=[
+  {cat:'🟢 Primeiro contato / diagnóstico',items:[{t:'Modelo de mensagem',m:'Os modelos de mensagem da Nati ficam na versão privada do time.'}]},
+  {cat:'🔥 Aprofundar a dor / escada do sim',items:[{t:'Modelo de mensagem',m:'Versão privada do time.'}]},
+  {cat:'💎 Apresentar e fechar',items:[{t:'Modelo de mensagem',m:'Versão privada do time.'}]},
+  {cat:'❄️ Lead frio (não assistiu nada)',items:[{t:'Modelo de mensagem',m:'Versão privada do time.'}]},
+  {cat:'🛡️ Objeções',items:[{t:'Modelo de mensagem',m:'Versão privada do time.'}]},
+  {cat:'⏳ Follow-up (resgate)',items:[{t:'Modelo de mensagem',m:'Versão privada do time.'}]},
+];
 function msgCard(title,text){
   const card=el('div','rsum');
   const head=el('div','rsum-h',`<div class="rsum-n">${esc(title)}</div>`);
