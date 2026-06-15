@@ -1823,11 +1823,20 @@ function openSheet(html){sheet.innerHTML='<div class="grab"></div>'+html;ovl.cla
 function closeSheet(){ovl.classList.remove('show');sheet.classList.remove('show')}
 ovl.onclick=closeSheet;
 
-// conta logada (sair)
+// conta + (gestor) "ver como" cada pessoa
 function openUserPicker(){
-  const u=U(S.current);
-  openSheet(`<h3>Sua conta</h3><p class="sub">Você está logado como <b>${esc(u.name)}</b>${ME&&ME.email?` · ${esc(ME.email)}`:''}.</p>
-    <button class="danger" id="logoutBtn">Sair da conta</button>`);
+  const mgr=!!(ME&&['ana','simoni'].includes(ME.role));
+  let h=`<h3>Sua conta</h3>`;
+  if(mgr){
+    h+=`<p class="sub">Você vê o painel de todo mundo. Toque pra <b>visualizar como</b> cada pessoa:</p><div class="userpick">`;
+    USERS.forEach(u=>{h+=`<button data-u="${u.id}" class="${u.id===S.current?'on':''}">${av(u)}<div><div class="un">${u.name}${ME&&u.id===ME.role?' · você':''}</div><div class="ur">${esc(u.role)}</div></div></button>`});
+    h+=`</div>`;
+  }else{
+    h+=`<p class="sub">Logado como <b>${esc(U(S.current).name)}</b>${ME&&ME.email?` · ${esc(ME.email)}`:''}.</p>`;
+  }
+  h+=`<button class="danger" id="logoutBtn" style="margin-top:14px">Sair da conta</button>`;
+  openSheet(h);
+  if(mgr)sheet.querySelectorAll('[data-u]').forEach(b=>b.onclick=()=>{S.current=b.dataset.u;closeSheet();render()});
   sheet.querySelector('#logoutBtn').onclick=async()=>{try{await sb.auth.signOut()}catch(e){}; location.reload()};
 }
 $('#whoBtn').onclick=openUserPicker;
@@ -2323,7 +2332,7 @@ function taskToRow(t){return {id:t.id,title:t.title,owner:t.owner,due:d2n(t.due)
 function rowToTask(r){return {id:r.id,title:r.title,owner:r.owner,due:r.due||null,cat:r.cat,status:r.status||'todo',prio:r.prio||null,review:!!r.review,reviewed:!!r.reviewed,recur:!!r.recur,doneAt:r.done_at||null,dep:r.dep||null,defPronto:r.def_pronto||'',entrega:r.entrega||'',sop:r.sop||null,desc:r.descr||'',proj:r.proj||'vrd',reviewSince:r.review_since||null,comments:r.comments||[],campos:r.campos||[],subs:r.subs||[],links:r.links||[]}}
 async function loadTasks(){const {data,error}=await sb.from('tasks').select('*');if(error){console.error('loadTasks',error);return}S.tasks=(data||[]).map(rowToTask)}
 let _syncT=null;
-function queueTaskSync(){if(!ME)return;clearTimeout(_syncT);_syncT=setTimeout(()=>{const mgr=(U(S.current)||{}).manager;const rows=S.tasks.filter(t=>mgr||t.owner===S.current).map(taskToRow);if(rows.length)sb.from('tasks').upsert(rows).then(({error})=>{if(error)console.error('sync',error)})},500)}
+function queueTaskSync(){if(!ME)return;clearTimeout(_syncT);_syncT=setTimeout(()=>{const mgr=['ana','simoni'].includes(ME.role);const rows=S.tasks.filter(t=>mgr||t.owner===ME.role).map(taskToRow);if(rows.length)sb.from('tasks').upsert(rows).then(({error})=>{if(error)console.error('sync',error)})},500)}
 async function dbDeleteTask(id){if(ME)await sb.from('tasks').delete().eq('id',id)}
 let _rtT=null;
 function subscribeTasks(){
@@ -2335,7 +2344,7 @@ function subscribeTasks(){
 /* ---- leads (pipeline) <-> banco ---- */
 function leadToRow(l){return {id:l.id,name:l.name,contact:l.contact,source:l.source,stage:l.stage,plano:l.plano||'—',tipo:l.tipo||'lead',historico:l.historico||'',condicao:l.condicao||'',last:d2n(l.last),next:d2n(l.next),note:l.note||'',owner:l.owner||'nati',comments:l.comments||[],campos:l.campos||[],updated_at:new Date().toISOString()}}
 function rowToLead(r){return {id:r.id,name:r.name,contact:r.contact,source:r.source,stage:r.stage,plano:r.plano||'—',tipo:r.tipo||'lead',historico:r.historico||'',condicao:r.condicao||'',last:r.last||null,next:r.next||null,note:r.note||'',owner:r.owner||'nati',comments:r.comments||[],campos:r.campos||[]}}
-const canWriteLeads=()=>['ana','simoni','nati'].includes(S.current);
+const canWriteLeads=()=>!!(ME&&['ana','simoni','nati'].includes(ME.role));
 async function loadLeads(){const {data,error}=await sb.from('leads').select('*');if(error){console.error('loadLeads',error);return}S.leads=(data||[]).map(rowToLead)}
 let _leadT=null;
 function queueLeadSync(){if(!ME||!canWriteLeads())return;clearTimeout(_leadT);_leadT=setTimeout(()=>{const rows=S.leads.map(leadToRow);if(rows.length)sb.from('leads').upsert(rows).then(({error})=>{if(error)console.error('leadsync',error)})},500)}
@@ -2344,14 +2353,14 @@ let _leadRtT=null;
 function subscribeLeads(){sb.channel('leads-rt').on('postgres_changes',{event:'*',schema:'public',table:'leads'},()=>{clearTimeout(_leadRtT);_leadRtT=setTimeout(async()=>{await loadLeads();if(!sheet.classList.contains('show'))render()},400)}).subscribe()}
 
 /* ---- config (etapas do funil + metas) <-> app_config ---- */
-const canWriteCfg=()=>['ana','simoni','nati'].includes(S.current);
+const canWriteCfg=()=>!!(ME&&['ana','simoni','nati'].includes(ME.role));
 async function loadConfig(){const {data}=await sb.from('app_config').select('*');(data||[]).forEach(r=>{if(r.key==='stages'&&Array.isArray(r.value))S.stages=r.value;if(r.key==='metas'&&r.value)S.metas=r.value})}
 let _cfgT=null;
 function queueConfigSync(){if(!ME||!canWriteCfg())return;clearTimeout(_cfgT);_cfgT=setTimeout(()=>{sb.from('app_config').upsert([{key:'stages',value:S.stages},{key:'metas',value:S.metas}]).then(({error})=>{if(error)console.error('cfgsync',error)})},800)}
 
 /* ---- conteúdo (sops/msgs/cofre): carrega do banco; gestor semeia 1x se vazio ---- */
 async function seedContentIfEmpty(){
-  if(!(U(S.current)||{}).manager)return;
+  if(!(ME&&['ana','simoni'].includes(ME.role)))return;
   const {data}=await sb.from('sops').select('id').limit(1);
   if(data&&data.length)return; // já populado
   const sopRows=Object.keys(SOPS).map((id,i)=>({id,title:SOPS[id].t,area:SOPS[id].area,passos:SOPS[id].passos,ord:i}));
@@ -2389,7 +2398,7 @@ async function afterLogin(){
     await seedContentIfEmpty();
     await loadContent();
     await loadTasks();
-    if(!S.tasks.length&&(U(S.current)||{}).manager){await sb.from('tasks').upsert(seed().map(taskToRow));await loadTasks()}
+    if(!S.tasks.length&&['ana','simoni'].includes(ME.role)){await sb.from('tasks').upsert(seed().map(taskToRow));await loadTasks()}
     await loadLeads();
     subscribeTasks();subscribeLeads();
     window.__appReady=true;
