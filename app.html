@@ -781,7 +781,7 @@ const TABS=[
   {id:'admin',label:'Admin', short:'Admin', icon:'<path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/>', allow:['ana','simoni']},
 ];
 function isVRDTask(x){return !x.proj||x.proj==='vrd'}
-function canSeePessoal(uid){return uid==='simoni'||S.tasks.some(t=>t.proj==='pessoal'&&t.owner===uid)}
+function canSeePessoal(uid){return uid==='simoni'||uid==='nati'||uid==='mayara'||S.tasks.some(t=>t.proj==='pessoal'&&t.owner===uid)}
 function canSeeTab(tb,uid){if(tb.id==='pessoal')return canSeePessoal(uid);return !tb.allow||tb.allow.includes(uid)}
 function renderNav(){
   const tabs=TABS.filter(tb=>canSeeTab(tb,S.current));
