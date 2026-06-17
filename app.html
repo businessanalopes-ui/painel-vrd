@@ -2398,7 +2398,7 @@ async function afterLogin(){
     await seedContentIfEmpty();
     await loadContent();
     await loadTasks();
-    if(!S.tasks.length&&['ana','simoni'].includes(ME.role)){await sb.from('tasks').upsert(seed().map(taskToRow));await loadTasks()}
+    // tarefas começam vazias — cada um cria as suas (sem re-semear)
     await loadLeads();
     subscribeTasks();subscribeLeads();
     window.__appReady=true;
