@@ -354,6 +354,14 @@
   .corte .corte-st{flex:none;border:1px solid;border-radius:999px;padding:5px 11px;font-size:11.5px;font-weight:800;cursor:pointer;text-transform:capitalize}
   .corte .corte-u{flex:1;min-width:90px;border:1px solid var(--line);background:#0F0F12;border-radius:9px;padding:7px 9px;font-size:12px;color:var(--ink);font-family:inherit}
   .seg{display:flex;flex-wrap:wrap;gap:7px}
+  .recurcfg{background:var(--card-2);border:1px solid var(--line);border-radius:12px;padding:12px}
+  .daypick{display:flex;gap:6px;margin-top:9px}
+  .daypick button{flex:1;background:#0F0F12;border:1px solid var(--line);color:var(--soft);border-radius:9px;padding:9px 0;font-weight:700;font-size:12.5px;cursor:pointer}
+  .daypick button.on{background:var(--gold);color:#1A1606;border-color:var(--gold)}
+  .rmonth{display:flex;align-items:center;gap:8px;margin-top:9px;color:var(--soft);font-size:13.5px}
+  .rmonth input{width:64px;background:#0F0F12;border:1px solid var(--line);border-radius:9px;padding:8px;color:var(--ink);text-align:center;font-size:14px}
+  .rcustom{width:100%;margin-top:9px;background:#0F0F12;border:1px solid var(--line);border-radius:9px;padding:10px;color:var(--ink);font-size:14px}
+  .rhint{font-size:11.5px;color:var(--faint);margin-top:7px}
   .seg button{border:1px solid var(--line);background:#0F0F12;border-radius:999px;padding:8px 13px;font-weight:700;font-size:12.5px;
     color:var(--soft);cursor:pointer}
   .seg button.on{background:var(--gold);color:#1A1606;border-color:var(--gold)}
@@ -680,7 +688,7 @@ function seed(){
 let _id=1;
 function t(title,owner,due,cat,o={}){
   return {id:'t'+(_id++),title,owner,due,cat,status:o.status||'todo',
-    review:!!o.review,reviewed:false,recur:!!o.recur,doneAt:null,dep:o.dep||null,
+    review:!!o.review,reviewed:false,recur:!!o.recur,recurCfg:o.recurCfg||null,doneAt:null,dep:o.dep||null,
     prio:o.prio||null,defPronto:o.defPronto||'',entrega:'',sop:o.sop||null,
     desc:o.desc||'',comments:o.comments||[],campos:o.campos||[],subs:o.subs||[],links:o.links||[],
     reviewSince:o.reviewSince||null,proj:o.proj||'vrd'};
@@ -790,7 +798,7 @@ function metaChips(tk,showOwner){
   if(tk.links&&tk.links.length)h+=`<span class="chip lk">🔗 ${tk.links.length}</span>`;
   if(tk.sop)h+=`<span class="chip recur">📋 SOP</span>`;
   if(tk.review)h+=`<span class="chip rev">revisar</span>`;
-  if(tk.recur)h+=`<span class="chip recur">↻ recorrente</span>`;
+  if(tk.recur)h+=`<span class="chip recur">↻ ${esc(recurLabel(tk))}</span>`;
   return h;
 }
 
@@ -1975,6 +1983,36 @@ function wireSubsLinks(obj,reopen){
 }
 
 // task detail
+/* ---- recorrência (diária / semanal / mensal / personalizado) ---- */
+const WEEKDAYS=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+const WEEKDAYS_S=['D','S','T','Q','Q','S','S'];
+function recurLabel(tk){
+  if(!tk.recur)return '';
+  const r=tk.recurCfg||{};
+  if(r.type==='semanal'&&(r.days||[]).length)return 'Semanal · '+r.days.slice().sort((a,b)=>a-b).map(d=>WEEKDAYS[d]).join(' ');
+  if(r.type==='mensal')return 'Mensal · dia '+(r.dom||1);
+  if(r.type==='personalizado'&&r.custom)return r.custom;
+  if(r.type==='diaria')return 'Diária';
+  return 'recorrente';
+}
+function recurConfigHTML(obj){
+  if(!obj.recur)return '';
+  const r=obj.recurCfg||{type:'diaria'};const tp=r.type||'diaria';
+  const types=[['diaria','Diária'],['semanal','Semanal'],['mensal','Mensal'],['personalizado','Personalizado']];
+  let h=`<div class="field recurcfg"><label>Como se repete</label><div class="seg" id="nRecType">${types.map(([k,l])=>`<button data-rt="${k}" class="${tp===k?'on':''}">${l}</button>`).join('')}</div>`;
+  if(tp==='semanal')h+=`<div class="daypick" id="nRecDays">${WEEKDAYS_S.map((d,i)=>`<button data-rd="${i}" class="${(r.days||[]).includes(i)?'on':''}" title="${WEEKDAYS[i]}">${d}</button>`).join('')}</div><div class="rhint">Escolha os dias da semana.</div>`;
+  else if(tp==='mensal')h+=`<div class="rmonth"><span>Todo dia</span><input id="nRecDom" type="number" min="1" max="31" value="${r.dom||1}"><span>de cada mês</span></div>`;
+  else if(tp==='personalizado')h+=`<input id="nRecCustom" class="rcustom" placeholder="Ex.: a cada 15 dias, toda 1ª segunda do mês..." value="${esc(r.custom||'')}">`;
+  return h+'</div>';
+}
+function wireRecur(obj,redraw,persist){
+  if(!obj.recur)return;
+  if(!obj.recurCfg)obj.recurCfg={type:'diaria'};
+  sheet.querySelectorAll('#nRecType [data-rt]').forEach(b=>b.onclick=()=>{obj.recurCfg.type=b.dataset.rt;redraw()});
+  sheet.querySelectorAll('#nRecDays [data-rd]').forEach(b=>b.onclick=()=>{const i=+b.dataset.rd;const d=(obj.recurCfg.days||[]).slice();obj.recurCfg.days=d.includes(i)?d.filter(x=>x!==i):d.concat(i);redraw()});
+  const dom=sheet.querySelector('#nRecDom');if(dom)dom.onchange=()=>{obj.recurCfg.dom=Math.min(31,Math.max(1,parseInt(dom.value)||1));if(persist)persist()};
+  const cst=sheet.querySelector('#nRecCustom');if(cst)cst.onchange=()=>{obj.recurCfg.custom=cst.value;if(persist)persist()};
+}
 function openTask(tk){
   const hasSop=tk.sop&&SOPS[tk.sop];
   openSheet(`<h3>${esc(tk.title)}</h3>
@@ -1985,6 +2023,8 @@ function openTask(tk){
     <div class="field"><label>Responsável</label><select id="tOwner">${USERS.map(u=>`<option value="${u.id}" ${u.id===tk.owner?'selected':''}>${u.name} · ${u.role}</option>`).join('')}</select></div>
     <div class="field"><label>Prioridade</label><div class="seg" id="tPrio"><button data-p="" class="${!tk.prio?'on':''}">—</button>${Object.keys(PRIOS).map(p=>`<button data-p="${p}" class="${tk.prio===p?'on':''}">${PRIOS[p].l}</button>`).join('')}</div></div>
     ${tk.review?`<div class="field"><div class="toggle ${tk.reviewed?'on':''}" id="revT"><div class="sw"><i></i></div><div class="tx">Revisado ✓<small>Confirmo que conferi a entrega</small></div></div></div>`:''}
+    <div class="field"><div class="toggle ${tk.recur?'on':''}" id="tRec"><div class="sw"><i></i></div><div class="tx">Recorrente<small>Tarefa que se repete</small></div></div></div>
+    ${recurConfigHTML(tk)}
     <div class="field"><label>Definição de pronto</label><textarea id="tDef" placeholder="Como saber que está pronto?">${esc(tk.defPronto||'')}</textarea></div>
     <div class="field"><label>Link da entrega</label><input id="tEnt" placeholder="Cole o link do resultado" value="${esc(tk.entrega||'')}">${tk.entrega?`<a href="${esc(tk.entrega)}" target="_blank" rel="noopener" style="display:inline-block;margin-top:6px;color:var(--gold-2);font-size:12.5px;font-weight:700">Abrir entrega ↗</a>`:''}</div>
     <div class="field"><label>Depende de quem?</label><select id="tDep"><option value="">— ninguém —</option>${USERS.map(u=>`<option value="${u.id}" ${u.id===tk.dep?'selected':''}>${u.name}</option>`).join('')}</select></div>
@@ -2002,6 +2042,8 @@ function openTask(tk){
   sheet.querySelector('#tOwner').onchange=e=>{tk.owner=e.target.value;save();render();openTask(tk)};
   sheet.querySelectorAll('#tPrio [data-p]').forEach(b=>b.onclick=()=>{tk.prio=b.dataset.p||null;save();render();openTask(tk)});
   const rt=sheet.querySelector('#revT');if(rt)rt.onclick=()=>{tk.reviewed=!tk.reviewed;save();openTask(tk)};
+  const trec=sheet.querySelector('#tRec');if(trec)trec.onclick=()=>{tk.recur=!tk.recur;if(tk.recur&&!tk.recurCfg)tk.recurCfg={type:'diaria'};save();render();openTask(tk)};
+  wireRecur(tk,()=>{save();openTask(tk)},()=>{save();render()});
   sheet.querySelector('#tDef').onchange=e=>{tk.defPronto=e.target.value;save()};
   sheet.querySelector('#tEnt').onchange=e=>{tk.entrega=e.target.value;save();render()};
   const dp=sheet.querySelector('#tDep');if(dp)dp.onchange=()=>{tk.dep=dp.value||null;save();render();openTask(tk)};
@@ -2045,6 +2087,7 @@ function openNew(){
     ${linksHTML(draft)}
     <div class="field"><div class="toggle ${draft.review?'on':''}" id="nRev"><div class="sw"><i></i></div><div class="tx">Exige revisão<small>Só fecha depois de conferida</small></div></div></div>
     <div class="field"><div class="toggle ${draft.recur?'on':''}" id="nRec"><div class="sw"><i></i></div><div class="tx">Recorrente<small>Tarefa que se repete</small></div></div></div>
+    ${recurConfigHTML(draft)}
     <button class="primary" id="nSave">Adicionar</button>`);
   const t=sheet.querySelector('#nT');t.focus();
   t.oninput=e=>draft.title=e.target.value;
@@ -2055,7 +2098,8 @@ function openNew(){
   sheet.querySelectorAll('#nPrio [data-p]').forEach(b=>b.onclick=()=>{draft.prio=b.dataset.p||null;openNew()});
   sheet.querySelector('#nDef').oninput=e=>draft.defPronto=e.target.value;
   sheet.querySelector('#nRev').onclick=()=>{draft.review=!draft.review;openNew()};
-  sheet.querySelector('#nRec').onclick=()=>{draft.recur=!draft.recur;openNew()};
+  sheet.querySelector('#nRec').onclick=()=>{draft.recur=!draft.recur;if(draft.recur&&!draft.recurCfg)draft.recurCfg={type:'diaria'};openNew()};
+  wireRecur(draft,openNew);
   wireSubsLinks(draft,openNew);
   sheet.querySelector('#nSave').onclick=()=>{
     if(!draft.title.trim()){alert('Dá um título pra tarefa 🙂');return}
@@ -2063,7 +2107,7 @@ function openNew(){
   };
 }
 function t2(d){return {id:'t'+Date.now(),title:d.title.trim(),owner:d.owner,due:d.due||null,cat:d.cat,
-  status:'todo',review:d.review,reviewed:false,recur:d.recur,doneAt:null,dep:d.dep||null,
+  status:'todo',review:d.review,reviewed:false,recur:d.recur,recurCfg:d.recurCfg||null,doneAt:null,dep:d.dep||null,
   prio:d.prio||null,defPronto:d.defPronto||'',entrega:'',sop:null,desc:'',comments:[],campos:[],
   subs:(d.subs||[]).filter(s=>s.t&&s.t.trim()),links:d.links||[]}}
 
@@ -2408,8 +2452,8 @@ async function doAuth(){
 
 /* ---- mapeamento tarefa <-> linha do banco ---- */
 const d2n=v=>(v===''||v==null)?null:v;
-function taskToRow(t){return {id:t.id,title:t.title,owner:t.owner,due:d2n(t.due),cat:t.cat,status:t.status||'todo',prio:t.prio||null,review:!!t.review,reviewed:!!t.reviewed,recur:!!t.recur,done_at:d2n(t.doneAt),dep:t.dep||null,def_pronto:t.defPronto||'',entrega:t.entrega||'',sop:t.sop||null,descr:t.desc||'',proj:t.proj||'vrd',review_since:d2n(t.reviewSince),comments:t.comments||[],campos:t.campos||[],subs:t.subs||[],links:t.links||[],updated_at:new Date().toISOString()}}
-function rowToTask(r){return {id:r.id,title:r.title,owner:r.owner,due:r.due||null,cat:r.cat,status:r.status||'todo',prio:r.prio||null,review:!!r.review,reviewed:!!r.reviewed,recur:!!r.recur,doneAt:r.done_at||null,dep:r.dep||null,defPronto:r.def_pronto||'',entrega:r.entrega||'',sop:r.sop||null,desc:r.descr||'',proj:r.proj||'vrd',reviewSince:r.review_since||null,comments:r.comments||[],campos:r.campos||[],subs:r.subs||[],links:r.links||[]}}
+function taskToRow(t){return {id:t.id,title:t.title,owner:t.owner,due:d2n(t.due),cat:t.cat,status:t.status||'todo',prio:t.prio||null,review:!!t.review,reviewed:!!t.reviewed,recur:!!t.recur,recur_cfg:t.recurCfg||{},done_at:d2n(t.doneAt),dep:t.dep||null,def_pronto:t.defPronto||'',entrega:t.entrega||'',sop:t.sop||null,descr:t.desc||'',proj:t.proj||'vrd',review_since:d2n(t.reviewSince),comments:t.comments||[],campos:t.campos||[],subs:t.subs||[],links:t.links||[],updated_at:new Date().toISOString()}}
+function rowToTask(r){return {id:r.id,title:r.title,owner:r.owner,due:r.due||null,cat:r.cat,status:r.status||'todo',prio:r.prio||null,review:!!r.review,reviewed:!!r.reviewed,recur:!!r.recur,recurCfg:(r.recur_cfg&&Object.keys(r.recur_cfg).length)?r.recur_cfg:null,doneAt:r.done_at||null,dep:r.dep||null,defPronto:r.def_pronto||'',entrega:r.entrega||'',sop:r.sop||null,desc:r.descr||'',proj:r.proj||'vrd',reviewSince:r.review_since||null,comments:r.comments||[],campos:r.campos||[],subs:r.subs||[],links:r.links||[]}}
 async function loadTasks(){const {data,error}=await sb.from('tasks').select('*');if(error){console.error('loadTasks',error);return}S.tasks=(data||[]).map(rowToTask)}
 let _syncT=null;
 function queueTaskSync(){if(!ME)return;clearTimeout(_syncT);_syncT=setTimeout(()=>{const mgr=['ana','simoni'].includes(ME.role);const rows=S.tasks.filter(t=>mgr||t.owner===ME.role).map(taskToRow);if(rows.length)sb.from('tasks').upsert(rows).then(({error})=>{if(error)console.error('sync',error)})},500)}
