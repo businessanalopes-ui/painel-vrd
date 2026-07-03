@@ -2015,6 +2015,7 @@ function wireRecur(obj,redraw,persist){
 }
 function openTask(tk){
   const hasSop=tk.sop&&SOPS[tk.sop];
+  const _wasOpen=sheet.classList.contains('show'),_sc=_wasOpen?sheet.scrollTop:0;
   openSheet(`<h3>${esc(tk.title)}</h3>
     <div class="det-meta">${metaChips(tk,true)}<span class="chip cat-rotina">${STLABEL[tk.status]}</span>
     ${tk.review?`<span class="chip ${tk.reviewed?'cat-comercial':'rev'}">${tk.reviewed?'revisado ✓':'aguarda revisão'}</span>`:''}</div>
@@ -2052,6 +2053,7 @@ function openTask(tk){
   wireSubsLinks(tk,()=>openTask(tk));
   wireCC(tk,()=>openTask(tk));
   sheet.querySelector('#delT').onclick=()=>{if(typeof dbDeleteTask==='function')dbDeleteTask(tk.id);S.tasks=S.tasks.filter(x=>x.id!==tk.id);save();closeSheet();render()};
+  if(_wasOpen)sheet.scrollTop=_sc;
 }
 function openSOP(id){
   const s=SOPS[id];if(!s)return;
@@ -2074,6 +2076,7 @@ function openReview(tk){
 // new task
 let draft;
 function openNew(){
+  const _wasOpen=sheet.classList.contains('show'),_sc=_wasOpen?sheet.scrollTop:0;
   openSheet(`<h3>Nova tarefa</h3>
     <div class="field"><label>O que precisa ser feito?</label><input id="nT" placeholder="Ex.: Subir os stories do dia" value="${esc(draft.title)}"></div>
     <div class="field"><label>Responsável</label><select id="nO">${USERS.map(u=>`<option value="${u.id}" ${u.id===draft.owner?'selected':''}>${u.name} · ${u.role}</option>`).join('')}</select></div>
@@ -2105,6 +2108,7 @@ function openNew(){
     if(!draft.title.trim()){alert('Dá um título pra tarefa 🙂');return}
     S.tasks.unshift(t2(draft));save();closeSheet();render();
   };
+  if(_wasOpen)sheet.scrollTop=_sc;
 }
 function t2(d){return {id:'t'+Date.now(),title:d.title.trim(),owner:d.owner,due:d.due||null,cat:d.cat,
   status:'todo',review:d.review,reviewed:false,recur:d.recur,recurCfg:d.recurCfg||null,doneAt:null,dep:d.dep||null,
