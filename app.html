@@ -127,6 +127,9 @@
   .pipehint{margin-bottom:12px}
   .pipetools{margin-bottom:18px}
   .editstages{background:#16161A;border:1px solid var(--line);color:var(--soft);border-radius:10px;padding:9px 14px;font-weight:700;font-size:12.5px;cursor:pointer}
+  .pipesearch{width:100%;margin:0 0 12px;background:#0F0F12;border:1px solid var(--line);border-radius:12px;padding:11px 14px;color:var(--ink);font-size:14px}
+  .pipesearch:focus{outline:none;border-color:var(--gold-line)}
+  .kc-more{color:var(--gold-2);font-size:12px;font-weight:700;padding:9px 4px;text-align:center}
   .editstages:hover{border-color:var(--gold-line);color:var(--gold-2)}
   .stageedit{display:flex;flex-direction:column;gap:11px;margin-bottom:10px}
   .strow{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
@@ -671,15 +674,15 @@ const STLABEL={todo:'A fazer',doing:'Fazendo',revisao:'Em revisão',done:'Feito'
 const STORDER=['todo','doing','revisao','done'];
 const PRIOS={alta:{l:'Alta',c:'r'},media:{l:'Média',c:'a'},baixa:{l:'Baixa',c:'n'}};
 let SOPS={
-  vendas_abordagem:{t:'Processo de vendas (modelo)',area:'comercial',passos:['Carrega do banco quando você loga.']},
-  vendas_objecoes:{t:'Árvore de objeções (modelo)',area:'comercial',passos:['Carrega do banco.']},
+  vendas_abordagem:{t:'Processo de vendas (modelo)',area:'comercial',passos:['Carrega do banco.']},
+  vendas_objecoes:{t:'Objeções (modelo)',area:'comercial',passos:['Carrega do banco.']},
   lead_frio:{t:'Lead frio (modelo)',area:'comercial',passos:['Carrega do banco.']},
-  retencao:{t:'Retenção & cancelamento (modelo)',area:'comercial',passos:['Carrega do banco.']},
-  repostagem:{t:'Repostar IG → TikTok / Shorts (modelo)',area:'conteudo',passos:['Carrega do banco.']},
-  trafego_subir:{t:'Subir campanha de tráfego (modelo)',area:'trafego',passos:['Carrega do banco.']},
-  manychat:{t:'Criar prompts do ManyChat (modelo)',area:'tecnico',passos:['Carrega do banco.']},
-  amazon_marcas:{t:'Rotina da Amazon (modelo)',area:'rotina',passos:['Carrega do banco.']},
-  campanha_disparo:{t:'Disparo de ação/campanha (modelo)',area:'comercial',passos:['Carrega do banco.']},
+  retencao:{t:'Retenção (modelo)',area:'comercial',passos:['Carrega do banco.']},
+  repostagem:{t:'Repostar (modelo)',area:'conteudo',passos:['Carrega do banco.']},
+  trafego_subir:{t:'Tráfego (modelo)',area:'trafego',passos:['Carrega do banco.']},
+  manychat:{t:'ManyChat (modelo)',area:'tecnico',passos:['Carrega do banco.']},
+  amazon_marcas:{t:'Amazon (modelo)',area:'rotina',passos:['Carrega do banco.']},
+  campanha_disparo:{t:'Disparo (modelo)',area:'comercial',passos:['Carrega do banco.']},
 };
 
 function seed(){
@@ -748,7 +751,7 @@ function seedLaunch(){
   };
 }
 function seedCofre(){
-  return [{f:'Acessos do time',l:'—',n:'Carrega do banco (só gestores).'}];
+  return [{f:'Acessos do time',l:'—',n:'Carrega do banco.'}];
 }
 
 let S=load();
@@ -2180,7 +2183,7 @@ function vVendas(v){
 }
 /* Biblioteca de mensagens prontas (copiar e colar) — baseada no processo da Nati */
 let MSGS=[
-  {cat:'Modelos de mensagem',items:[{t:'Modelos da Nati',m:'Os modelos de mensagem carregam do banco quando você loga.'}]},
+  {cat:'Modelos de mensagem',items:[{t:'Modelos da Nati',m:'Carregam do banco.'}]},
 ];
 function msgCard(title,text){
   const card=el('div','rsum');
@@ -2244,22 +2247,30 @@ function vVendaGeral(v){
   else v.appendChild(el('div','',`<div style="color:var(--faint);font-size:13px;padding:0 4px 8px">Nenhum follow-up marcado pra hoje. 👏</div>`));
 }
 function vVendaPipeline(v){
-  v.appendChild(el('div','note pipehint',`Arraste o lead pela jornada de vendas da Nati — segure e arraste o card pra coluna que quiser.`));
+  v.appendChild(el('div','note pipehint',`Arraste o lead pela jornada de vendas — segure e arraste o card. Use a busca pra achar entre os ${S.leads.length} leads.`));
   const tools=el('div','pipetools');
   const editBtn=el('button','editstages','⚙️ Editar etapas — renomear · reordenar · adicionar');
   editBtn.onclick=openStageEditor;tools.appendChild(editBtn);
   v.appendChild(tools);
-  const board=el('div','kboard pipe');
-  S.stages.forEach(s=>{
-    const st=s.id;
-    const items=S.leads.filter(x=>x.stage===st);
-    const c=el('div','kcol');c.dataset.drop=st;
-    c.appendChild(el('div','kcol-h',`<span class="pip" style="background:${s.c}"></span>${esc(s.l)}<span class="cnt">${items.length}</span>`));
-    if(!items.length)c.appendChild(el('div','kc-empty','—'));
-    items.forEach(ld=>c.appendChild(leadCard(ld,false)));
-    board.appendChild(c);
-  });
-  v.appendChild(board);
+  const si=el('input','pipesearch');si.placeholder='🔎 Buscar lead por nome, e-mail ou telefone...';si.value=S.pipeSearch||'';
+  v.appendChild(si);
+  const board=el('div','kboard pipe');v.appendChild(board);
+  const CAP=40;
+  const draw=()=>{
+    board.innerHTML='';
+    const q=(S.pipeSearch||'').trim().toLowerCase();
+    S.stages.forEach(s=>{
+      const list=S.leads.filter(x=>x.stage===s.id&&(!q||(x.name||'').toLowerCase().includes(q)||(x.contact||'').toLowerCase().includes(q)));
+      const c=el('div','kcol');c.dataset.drop=s.id;
+      c.appendChild(el('div','kcol-h',`<span class="pip" style="background:${s.c}"></span>${esc(s.l)}<span class="cnt">${list.length}</span>`));
+      if(!list.length)c.appendChild(el('div','kc-empty','—'));
+      list.slice(0,CAP).forEach(ld=>c.appendChild(leadCard(ld,false)));
+      if(list.length>CAP)c.appendChild(el('div','kc-more',`+ ${list.length-CAP} — use a busca pra achar`));
+      board.appendChild(c);
+    });
+  };
+  si.oninput=()=>{S.pipeSearch=si.value;clearTimeout(window.__pipeT);window.__pipeT=setTimeout(draw,220)};
+  draw();
 }
 /* editor de etapas (renomear / reordenar / cor / adicionar / remover) */
 const STAGE_COLORS=['#9E998D','#5AA6C9','#E2A33C','#C9A24B','#B98BD6','#46B07C','#D9594C','#E07A8A'];
@@ -2473,7 +2484,7 @@ function subscribeTasks(){
 function leadToRow(l){return {id:l.id,name:l.name,contact:l.contact,source:l.source,stage:l.stage,plano:l.plano||'—',tipo:l.tipo||'lead',historico:l.historico||'',condicao:l.condicao||'',last:d2n(l.last),next:d2n(l.next),note:l.note||'',owner:l.owner||'nati',comments:l.comments||[],campos:l.campos||[],updated_at:new Date().toISOString()}}
 function rowToLead(r){return {id:r.id,name:r.name,contact:r.contact,source:r.source,stage:r.stage,plano:r.plano||'—',tipo:r.tipo||'lead',historico:r.historico||'',condicao:r.condicao||'',last:r.last||null,next:r.next||null,note:r.note||'',owner:r.owner||'nati',comments:r.comments||[],campos:r.campos||[]}}
 const canWriteLeads=()=>!!(ME&&['ana','simoni','nati'].includes(ME.role));
-async function loadLeads(){const {data,error}=await sb.from('leads').select('*');if(error){console.error('loadLeads',error);return}S.leads=(data||[]).map(rowToLead)}
+async function loadLeads(){let all=[],from=0;const size=1000;while(from<30000){const {data,error}=await sb.from('leads').select('*').range(from,from+size-1);if(error){console.error('loadLeads',error);break}all=all.concat(data||[]);if(!data||data.length<size)break;from+=size}S.leads=all.map(rowToLead)}
 let _leadT=null;
 function queueLeadSync(){if(!ME||!canWriteLeads())return;clearTimeout(_leadT);_leadT=setTimeout(()=>{const rows=S.leads.map(leadToRow);if(rows.length)sb.from('leads').upsert(rows).then(({error})=>{if(error)console.error('leadsync',error)})},500)}
 async function dbDeleteLead(id){if(ME&&canWriteLeads())await sb.from('leads').delete().eq('id',id)}
