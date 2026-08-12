@@ -129,7 +129,11 @@
   .editstages{background:#16161A;border:1px solid var(--line);color:var(--soft);border-radius:10px;padding:9px 14px;font-weight:700;font-size:12.5px;cursor:pointer}
   .pipesearch{width:100%;margin:0 0 12px;background:#0F0F12;border:1px solid var(--line);border-radius:12px;padding:11px 14px;color:var(--ink);font-size:14px}
   .pipesearch:focus{outline:none;border-color:var(--gold-line)}
-  .kc-more{color:var(--gold-2);font-size:12px;font-weight:700;padding:9px 4px;text-align:center}
+  .tempfilter{display:flex;flex-wrap:wrap;gap:7px;margin:0 0 10px}
+  .tfbtn{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:6px 13px;font-weight:700;font-size:12.5px;color:var(--soft);cursor:pointer}
+  .tfbtn.on{background:var(--gold);color:#1A1606;border-color:var(--gold)}
+  .kc-more{display:block;width:100%;background:var(--card-2);border:1px solid var(--line);color:var(--gold-2);font-size:12px;font-weight:700;padding:9px;border-radius:10px;text-align:center;cursor:pointer;margin-top:4px}
+  .kc-more:hover{border-color:var(--gold-line)}
   .editstages:hover{border-color:var(--gold-line);color:var(--gold-2)}
   .stageedit{display:flex;flex-direction:column;gap:11px;margin-bottom:10px}
   .strow{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
@@ -721,6 +725,10 @@ function l(name,contact,source,stage,plano,last,next,note){
 /* tipo do contato (pra Nati saber na hora que condição pode oferecer) */
 const LEADTIPOS=[['lead','Lead','#5AA6C9'],['aluno','Aluno','#46B07C'],['exaluno','Ex-aluno','#E2A33C']];
 function tipoInfo(id){return LEADTIPOS.find(t=>t[0]===(id||'lead'))||LEADTIPOS[0]}
+const TEMPS=[['quente','🔥 Quente','#D9594C'],['morno','🟡 Morno','#E2A33C'],['frio','🔵 Frio','#5AA6C9']];
+function tempInfo(id){return TEMPS.find(t=>t[0]===id)}
+const CANAIS=[['whatsapp','WhatsApp','#46B07C'],['botconversa','BotConversa','#B98BD6'],['instagram','Instagram','#E07A8A'],['facebook','Facebook','#5AA6C9'],['tiktok','TikTok','#9E998D']];
+function canalInfo(id){return CANAIS.find(c=>c[0]===id)}
 /* metas da Nati (sugestões — o time ajusta em "editar metas") */
 function seedMetas(){return {abordagensDia:15,vendasMes:8}}
 function seedLeads(){
@@ -2154,6 +2162,8 @@ function leadCard(ld,showNext){
   const c=el('div','kcard');
   let chips=`<span class="chip" style="background:${st.c}22;color:${st.c}">${st.l}</span>`;
   const ti=tipoInfo(ld.tipo);chips+=`<span class="chip" style="background:${ti[2]}22;color:${ti[2]}">${ti[1]}</span>`;
+  const tmp=tempInfo(ld.temperatura);if(tmp)chips+=`<span class="chip" style="background:${tmp[2]}22;color:${tmp[2]}">${tmp[1]}</span>`;
+  const cn=canalInfo(ld.canal);if(cn)chips+=`<span class="chip" style="background:${cn[2]}22;color:${cn[2]}">💬 ${cn[1]}</span>`;
   chips+=`<span class="chip who-c"><span class="dot" style="background:#5AA6C9"></span>${esc(ld.source)}</span>`;
   if(ld.plano&&ld.plano!=='—')chips+=`<span class="chip cat-comercial">${esc(ld.plano)}</span>`;
   const nd=leadDue(ld.next);
@@ -2247,29 +2257,40 @@ function vVendaGeral(v){
   else v.appendChild(el('div','',`<div style="color:var(--faint);font-size:13px;padding:0 4px 8px">Nenhum follow-up marcado pra hoje. 👏</div>`));
 }
 function vVendaPipeline(v){
-  v.appendChild(el('div','note pipehint',`Arraste o lead pela jornada de vendas — segure e arraste o card. Use a busca pra achar entre os ${S.leads.length} leads.`));
+  v.appendChild(el('div','note pipehint',`Arraste o lead pela jornada — segure e arraste o card. Filtre por temperatura ou busque entre os ${S.leads.length} leads.`));
   const tools=el('div','pipetools');
   const editBtn=el('button','editstages','⚙️ Editar etapas — renomear · reordenar · adicionar');
   editBtn.onclick=openStageEditor;tools.appendChild(editBtn);
   v.appendChild(tools);
-  const si=el('input','pipesearch');si.placeholder='🔎 Buscar lead por nome, e-mail ou telefone...';si.value=S.pipeSearch||'';
-  v.appendChild(si);
-  const board=el('div','kboard pipe');v.appendChild(board);
-  const CAP=40;
+  const board=el('div','kboard pipe');
+  const shown={};const STEP=40;
   const draw=()=>{
     board.innerHTML='';
-    const q=(S.pipeSearch||'').trim().toLowerCase();
+    const q=(S.pipeSearch||'').trim().toLowerCase();const tp=S.pipeTemp||'';
+    const matchT=x=>!tp||(tp==='none'?!x.temperatura:x.temperatura===tp);
     S.stages.forEach(s=>{
-      const list=S.leads.filter(x=>x.stage===s.id&&(!q||(x.name||'').toLowerCase().includes(q)||(x.contact||'').toLowerCase().includes(q)));
+      const list=S.leads.filter(x=>x.stage===s.id&&matchT(x)&&(!q||(x.name||'').toLowerCase().includes(q)||(x.contact||'').toLowerCase().includes(q)));
+      const cap=shown[s.id]||STEP;
       const c=el('div','kcol');c.dataset.drop=s.id;
       c.appendChild(el('div','kcol-h',`<span class="pip" style="background:${s.c}"></span>${esc(s.l)}<span class="cnt">${list.length}</span>`));
       if(!list.length)c.appendChild(el('div','kc-empty','—'));
-      list.slice(0,CAP).forEach(ld=>c.appendChild(leadCard(ld,false)));
-      if(list.length>CAP)c.appendChild(el('div','kc-more',`+ ${list.length-CAP} — use a busca pra achar`));
+      list.slice(0,cap).forEach(ld=>c.appendChild(leadCard(ld,false)));
+      if(list.length>cap){const m=el('button','kc-more',`Carregar mais (${list.length-cap})`);m.onclick=()=>{shown[s.id]=cap+STEP*5;draw()};c.appendChild(m)}
       board.appendChild(c);
     });
   };
+  // filtro de temperatura
+  const tf=el('div','tempfilter');
+  [['','Todos'],['quente','🔥 Quente'],['morno','🟡 Morno'],['frio','🔵 Frio'],['none','Sem tag']].forEach(([id,lab])=>{
+    const b=el('button','tfbtn'+((S.pipeTemp||'')===id?' on':''),lab);
+    b.onclick=()=>{S.pipeTemp=id;tf.querySelectorAll('.tfbtn').forEach(x=>x.classList.remove('on'));b.classList.add('on');draw()};
+    tf.appendChild(b);
+  });
+  v.appendChild(tf);
+  const si=el('input','pipesearch');si.placeholder='🔎 Buscar lead por nome, e-mail ou telefone...';si.value=S.pipeSearch||'';
   si.oninput=()=>{S.pipeSearch=si.value;clearTimeout(window.__pipeT);window.__pipeT=setTimeout(draw,220)};
+  v.appendChild(si);
+  v.appendChild(board);
   draw();
 }
 /* editor de etapas (renomear / reordenar / cor / adicionar / remover) */
@@ -2361,6 +2382,8 @@ function openLead(ld){
       <div class="seg" id="lCad" style="margin-top:7px"><button data-d="0">Hoje</button><button data-d="3">+3d</button><button data-d="7">+7d</button><button data-d="15">+15d</button><button data-d="30">+30d</button></div></div>
     <div class="field"><label>Plano de interesse</label><div class="seg" id="lPl">${PLANOS.map(p=>`<button data-p="${p}" class="${ld.plano===p?'on':''}">${p}</button>`).join('')}</div></div>
     <div class="field"><label>Tipo de contato</label><div class="seg" id="lTipo">${LEADTIPOS.map(t=>`<button data-t="${t[0]}" class="${(ld.tipo||'lead')===t[0]?'on':''}">${t[1]}</button>`).join('')}</div></div>
+    <div class="field"><label>Temperatura</label><div class="seg" id="lTemp"><button data-tm="" class="${!ld.temperatura?'on':''}">—</button>${TEMPS.map(t=>`<button data-tm="${t[0]}" class="${ld.temperatura===t[0]?'on':''}">${t[1]}</button>`).join('')}</div></div>
+    <div class="field"><label>Canal da conversa <span style="color:var(--faint);font-weight:500">— onde está falando com o lead</span></label><div class="seg" id="lCanal"><button data-cn="" class="${!ld.canal?'on':''}">—</button>${CANAIS.map(c=>`<button data-cn="${c[0]}" class="${ld.canal===c[0]?'on':''}">${c[1]}</button>`).join('')}</div></div>
     <div class="field"><label>Histórico de compra <span style="color:var(--faint);font-weight:500">— quanto já pagou, nº de renovações</span></label><input id="lHist" value="${esc(ld.historico||'')}" placeholder="Ex.: aluno desde 2024, renovou 2× (US$ 597 cada)"></div>
     <div class="field"><label>Condição liberada <span style="color:var(--faint);font-weight:500">— que oferta pode fazer</span></label><input id="lCond" value="${esc(ld.condicao||'')}" placeholder="Ex.: por ser recorrente, pode oferecer renovação com desconto"></div>
     <div class="field"><label>Anotações</label><textarea id="lNote">${esc(ld.note)}</textarea></div>
@@ -2368,14 +2391,16 @@ function openLead(ld){
     ${commentsHTML(ld)}
     <button class="primary" id="lSave">Salvar</button>
     <button class="danger" id="lDel" style="margin-top:8px">Excluir lead</button>`);
-  let stage=ld.stage,plano=ld.plano,tipo=ld.tipo||'lead';
+  let stage=ld.stage,plano=ld.plano,tipo=ld.tipo||'lead',temp=ld.temperatura||'',canal=ld.canal||'';
   sheet.querySelectorAll('#lSt [data-s]').forEach(b=>b.onclick=()=>{stage=b.dataset.s;sheet.querySelectorAll('#lSt [data-s]').forEach(x=>x.classList.toggle('on',x.dataset.s===stage))});
   sheet.querySelectorAll('#lPl [data-p]').forEach(b=>b.onclick=()=>{plano=b.dataset.p;sheet.querySelectorAll('#lPl [data-p]').forEach(x=>x.classList.toggle('on',x.dataset.p===plano))});
   sheet.querySelectorAll('#lTipo [data-t]').forEach(b=>b.onclick=()=>{tipo=b.dataset.t;sheet.querySelectorAll('#lTipo [data-t]').forEach(x=>x.classList.toggle('on',x.dataset.t===tipo))});
+  sheet.querySelectorAll('#lTemp [data-tm]').forEach(b=>b.onclick=()=>{temp=b.dataset.tm;sheet.querySelectorAll('#lTemp [data-tm]').forEach(x=>x.classList.toggle('on',x.dataset.tm===temp))});
+  sheet.querySelectorAll('#lCanal [data-cn]').forEach(b=>b.onclick=()=>{canal=b.dataset.cn;sheet.querySelectorAll('#lCanal [data-cn]').forEach(x=>x.classList.toggle('on',x.dataset.cn===canal))});
   sheet.querySelectorAll('#lCad [data-d]').forEach(b=>b.onclick=()=>{sheet.querySelector('#lNext').value=addDays(+b.dataset.d)});
-  sheet.querySelector('#lSave').onclick=()=>{ld.stage=stage;ld.plano=plano;ld.tipo=tipo;ld.historico=sheet.querySelector('#lHist').value;ld.condicao=sheet.querySelector('#lCond').value;ld.next=sheet.querySelector('#lNext').value||null;ld.note=sheet.querySelector('#lNote').value;if(isTerminal(stage))ld.next=null;save();closeSheet();render()};
+  sheet.querySelector('#lSave').onclick=()=>{ld.stage=stage;ld.plano=plano;ld.tipo=tipo;ld.temperatura=temp;ld.canal=canal;ld.historico=sheet.querySelector('#lHist').value;ld.condicao=sheet.querySelector('#lCond').value;ld.next=sheet.querySelector('#lNext').value||null;ld.note=sheet.querySelector('#lNote').value;if(isTerminal(stage))ld.next=null;save();closeSheet();render()};
   sheet.querySelector('#lDel').onclick=()=>{if(typeof dbDeleteLead==='function')dbDeleteLead(ld.id);S.leads=S.leads.filter(x=>x.id!==ld.id);save();closeSheet();render()};
-  wireCC(ld,()=>{ld.note=sheet.querySelector('#lNote').value;ld.stage=stage;ld.plano=plano;ld.tipo=tipo;ld.historico=sheet.querySelector('#lHist').value;ld.condicao=sheet.querySelector('#lCond').value;ld.next=sheet.querySelector('#lNext').value||ld.next;openLead(ld)});
+  wireCC(ld,()=>{ld.note=sheet.querySelector('#lNote').value;ld.stage=stage;ld.plano=plano;ld.tipo=tipo;ld.temperatura=temp;ld.canal=canal;ld.historico=sheet.querySelector('#lHist').value;ld.condicao=sheet.querySelector('#lCond').value;ld.next=sheet.querySelector('#lNext').value||ld.next;openLead(ld)});
 }
 let ldraft;
 function openNewLead(){ldraft={name:'',contact:'',source:'Lista de espera',next:todayISO(),note:''};drawNewLead()}
@@ -2394,7 +2419,7 @@ function drawNewLead(){
   sheet.querySelectorAll('#nlSrc [data-s]').forEach(b=>b.onclick=()=>{ldraft.source=b.dataset.s;sheet.querySelectorAll('#nlSrc [data-s]').forEach(x=>x.classList.toggle('on',x.dataset.s===ldraft.source))});
   sheet.querySelector('#nlSave').onclick=()=>{
     if(!ldraft.name.trim()){alert('Coloca o nome do lead 🙂');return}
-    S.leads.unshift({id:'l'+Date.now(),name:ldraft.name.trim(),contact:ldraft.contact.trim(),source:ldraft.source,stage:'novo',plano:'—',tipo:'lead',historico:'',condicao:'',last:null,next:ldraft.next||null,note:ldraft.note,owner:'nati',comments:[],campos:[]});
+    S.leads.unshift({id:'l'+Date.now(),name:ldraft.name.trim(),contact:ldraft.contact.trim(),source:ldraft.source,stage:'novo',plano:'—',tipo:'lead',temperatura:'',canal:'',historico:'',condicao:'',last:null,next:ldraft.next||null,note:ldraft.note,owner:'nati',comments:[],campos:[]});
     save();closeSheet();render();
   };
 }
@@ -2481,8 +2506,8 @@ function subscribeTasks(){
 }
 
 /* ---- leads (pipeline) <-> banco ---- */
-function leadToRow(l){return {id:l.id,name:l.name,contact:l.contact,source:l.source,stage:l.stage,plano:l.plano||'—',tipo:l.tipo||'lead',historico:l.historico||'',condicao:l.condicao||'',last:d2n(l.last),next:d2n(l.next),note:l.note||'',owner:l.owner||'nati',comments:l.comments||[],campos:l.campos||[],updated_at:new Date().toISOString()}}
-function rowToLead(r){return {id:r.id,name:r.name,contact:r.contact,source:r.source,stage:r.stage,plano:r.plano||'—',tipo:r.tipo||'lead',historico:r.historico||'',condicao:r.condicao||'',last:r.last||null,next:r.next||null,note:r.note||'',owner:r.owner||'nati',comments:r.comments||[],campos:r.campos||[]}}
+function leadToRow(l){return {id:l.id,name:l.name,contact:l.contact,source:l.source,stage:l.stage,plano:l.plano||'—',tipo:l.tipo||'lead',temperatura:l.temperatura||'',canal:l.canal||'',historico:l.historico||'',condicao:l.condicao||'',last:d2n(l.last),next:d2n(l.next),note:l.note||'',owner:l.owner||'nati',comments:l.comments||[],campos:l.campos||[],updated_at:new Date().toISOString()}}
+function rowToLead(r){return {id:r.id,name:r.name,contact:r.contact,source:r.source,stage:r.stage,plano:r.plano||'—',tipo:r.tipo||'lead',temperatura:r.temperatura||'',canal:r.canal||'',historico:r.historico||'',condicao:r.condicao||'',last:r.last||null,next:r.next||null,note:r.note||'',owner:r.owner||'nati',comments:r.comments||[],campos:r.campos||[]}}
 const canWriteLeads=()=>!!(ME&&['ana','simoni','nati'].includes(ME.role));
 async function loadLeads(){let all=[],from=0;const size=1000;while(from<30000){const {data,error}=await sb.from('leads').select('*').range(from,from+size-1);if(error){console.error('loadLeads',error);break}all=all.concat(data||[]);if(!data||data.length<size)break;from+=size}S.leads=all.map(rowToLead)}
 let _leadT=null;
