@@ -867,6 +867,7 @@ function renderNav(){
       const badge=(tb.id==='hoje'&&tcount)?`<span class="badge">${tcount}</span>`:'';
       let lb=sel==='#nav'?(tb.short||tb.label):tb.label;
       if(tb.id==='tarefas')lb=U(S.current).manager?(sel==='#nav'?'Equipe':'Tarefas equipe'):(sel==='#nav'?'Tarefas':'Minhas tarefas');
+      if(tb.id==='vendas'&&S.current==='mayara')lb=(sel==='#nav'?'Qualif.':'Qualificação');
       b.innerHTML=`<svg viewBox="0 0 24 24">${tb.icon}</svg><span>${lb}</span>${badge}`;
       const hubParent=(sel==='#sidenav'&&tb.id==='hubvrd');
       if(hubParent){b.classList.add('has-children');b.appendChild(el('span','caret',S.tab==='hubvrd'?'▾':'▸'))}
@@ -2208,9 +2209,13 @@ function leadCard(ld,showNext){
 }
 const VSUBS=[['geral','Visão geral'],['pipeline','Pipeline'],['mensagens','Mensagens'],['documentos','Documentos']];
 function vVendas(v){
-  v.appendChild(el('div','pagehead',`<div class="k">Comercial · CRM</div><h2>Vendas</h2>
+  const isMay=S.current==='mayara';
+  v.appendChild(el('div','pagehead', isMay
+    ? `<div class="k">Comercial · SDR</div><h2>Qualificação</h2>
+    <p>Seu funil de qualificação — puxe conversa, aqueça e passe os leads quentes pra Nati.</p>`
+    : `<div class="k">Comercial · CRM</div><h2>Vendas</h2>
     <p>Visão geral, pipeline, mensagens e documentos do comercial.</p>`));
-  const sub=S.vendaSub||'geral';
+  const sub=S.vendaSub||(isMay?'pipeline':'geral');
   const bar=el('div','subtabs');
   VSUBS.forEach(([id,lab])=>{const b=el('button','subtab'+(sub===id?' on':''),lab);b.onclick=()=>{S.vendaSub=id;save();render()};bar.appendChild(b)});
   v.appendChild(bar);
