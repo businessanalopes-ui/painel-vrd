@@ -697,6 +697,7 @@ function t(title,owner,due,cat,o={}){
    fase: 'sdr' (colunas da Mayara) · 'both' (Qualificado — a ponte, aparece pros dois) · 'closer' (colunas da Nati). */
 function seedStages(){return [
   {id:'novo',l:'Novo lead',c:'#9E998D',fase:'closer'},
+  {id:'contatar',l:'A contatar',c:'#7FA8C9',fase:'sdr'},
   {id:'conversa',l:'Em conversa',c:'#B98BD6',fase:'sdr'},
   {id:'aquecendo',l:'Aquecendo',c:'#E2A33C',fase:'sdr'},
   {id:'qualificado',l:'Qualificado ✅',c:'#46B07C',fase:'both'},
@@ -708,7 +709,7 @@ function seedStages(){return [
   {id:'perdido',l:'Perdido',c:'#D9594C',lost:true,fase:'closer'},
 ];}
 /* Fase padrão por id (usada pra migrar configs antigas que não têm 'fase'). */
-const FASE_BY_ID={novo:'closer',conversa:'sdr',aquecendo:'sdr',qualificado:'both',diagnostico:'closer',dor:'closer',oferta:'closer',followup:'closer',aluno:'closer',perdido:'closer'};
+const FASE_BY_ID={novo:'closer',contatar:'sdr',conversa:'sdr',aquecendo:'sdr',qualificado:'both',diagnostico:'closer',dor:'closer',oferta:'closer',followup:'closer',aluno:'closer',perdido:'closer'};
 /* Garante a estrutura SDR→Closer mesmo em bancos antigos (roda em memória; se um gestor entrar, sincroniza).
    NÃO move nenhum lead — só marca a fase de cada etapa e insere as colunas novas (que nascem vazias). */
 function normalizeStages(){
@@ -717,7 +718,8 @@ function normalizeStages(){
   a.forEach(s=>{if(FASE_BY_ID[s.id])s.fase=FASE_BY_ID[s.id];else if(!s.fase)s.fase='closer'});
   const has=id=>a.some(s=>s.id===id);
   const inserts=[
-    {after:'novo',stage:{id:'conversa',l:'Em conversa',c:'#B98BD6',fase:'sdr'}},
+    {after:'novo',stage:{id:'contatar',l:'A contatar',c:'#7FA8C9',fase:'sdr'}},
+    {after:'contatar',stage:{id:'conversa',l:'Em conversa',c:'#B98BD6',fase:'sdr'}},
     {after:'conversa',stage:{id:'aquecendo',l:'Aquecendo',c:'#E2A33C',fase:'sdr'}},
     {after:'aquecendo',stage:{id:'qualificado',l:'Qualificado ✅',c:'#46B07C',fase:'both'}},
   ];
@@ -2448,7 +2450,7 @@ function drawNewLead(){
   sheet.querySelectorAll('#nlSrc [data-s]').forEach(b=>b.onclick=()=>{ldraft.source=b.dataset.s;sheet.querySelectorAll('#nlSrc [data-s]').forEach(x=>x.classList.toggle('on',x.dataset.s===ldraft.source))});
   sheet.querySelector('#nlSave').onclick=()=>{
     if(!ldraft.name.trim()){alert('Coloca o nome do lead 🙂');return}
-    S.leads.unshift({id:'l'+Date.now(),name:ldraft.name.trim(),contact:ldraft.contact.trim(),source:ldraft.source,stage:(ME&&ME.role==='mayara')?'conversa':'novo',plano:'—',tipo:'lead',temperatura:'',canal:'',historico:'',condicao:'',last:null,next:ldraft.next||null,note:ldraft.note,owner:'nati',comments:[],campos:[]});
+    S.leads.unshift({id:'l'+Date.now(),name:ldraft.name.trim(),contact:ldraft.contact.trim(),source:ldraft.source,stage:(ME&&ME.role==='mayara')?'contatar':'novo',plano:'—',tipo:'lead',temperatura:'',canal:'',historico:'',condicao:'',last:null,next:ldraft.next||null,note:ldraft.note,owner:'nati',comments:[],campos:[]});
     save();closeSheet();render();
   };
 }
