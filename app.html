@@ -125,6 +125,7 @@
   .scopetg{margin-bottom:9px}
   /* pipeline: espaçamento + editar etapas */
   .pipehint{margin-bottom:12px}
+  .rolehint{background:rgba(70,176,124,.10);border-color:rgba(70,176,124,.35);color:#8FD3B0}
   .pipetools{margin-bottom:18px}
   .editstages{background:#16161A;border:1px solid var(--line);color:var(--soft);border-radius:10px;padding:9px 14px;font-weight:700;font-size:12.5px;cursor:pointer}
   .pipesearch{width:100%;margin:0 0 12px;background:#0F0F12;border:1px solid var(--line);border-radius:12px;padding:11px 14px;color:var(--ink);font-size:14px}
@@ -139,6 +140,8 @@
   .strow{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
   .strow .sl{flex:1 1 100%;border:1px solid var(--line);background:#0F0F12;border-radius:9px;padding:9px 10px;font-size:13.5px;color:var(--ink);font-family:inherit}
   .strow .sl:focus{outline:none;border-color:var(--gold-line)}
+  .strow .sfase{border:1px solid var(--line);background:#0F0F12;border-radius:9px;padding:8px 9px;font-size:12px;color:var(--ink);font-family:inherit;flex:0 0 auto}
+  .strow .sfase:focus{outline:none;border-color:var(--gold-line)}
   .scolors{display:flex;gap:4px;flex:1 1 auto;align-items:center}
   .scolors .sc{width:17px;height:17px;border-radius:50%;border:2px solid transparent;cursor:pointer;padding:0}
   .scolors .sc.on{border-color:#fff}
@@ -656,7 +659,7 @@ document.getElementById('sideLogo').innerHTML=globeSVG(38)+WORDMARK;
 
 /* ============================ STATE ============================ */
 const KEY='bussola.app1';
-const PUBLISHED=false; // true = versão limpa pra publicar (estrutura sem nenhum dado de exemplo)
+const PUBLISHED=true; // true = versão limpa pra publicar (estrutura sem nenhum dado de exemplo)
 const todayISO=()=>{const d=new Date();return d.toISOString().slice(0,10)};
 const addDays=n=>{const d=new Date();d.setDate(d.getDate()+n);return d.toISOString().slice(0,10)};
 
@@ -677,21 +680,9 @@ const STATUSES=[['todo','A fazer','#9E998D'],['doing','Fazendo','#E2A33C'],['rev
 const STLABEL={todo:'A fazer',doing:'Fazendo',revisao:'Em revisão',done:'Feito'};
 const STORDER=['todo','doing','revisao','done'];
 const PRIOS={alta:{l:'Alta',c:'r'},media:{l:'Média',c:'a'},baixa:{l:'Baixa',c:'n'}};
-let SOPS={
-  vendas_abordagem:{t:'Processo de vendas (modelo)',area:'comercial',passos:['Carrega do banco.']},
-  vendas_objecoes:{t:'Objeções (modelo)',area:'comercial',passos:['Carrega do banco.']},
-  lead_frio:{t:'Lead frio (modelo)',area:'comercial',passos:['Carrega do banco.']},
-  retencao:{t:'Retenção (modelo)',area:'comercial',passos:['Carrega do banco.']},
-  repostagem:{t:'Repostar (modelo)',area:'conteudo',passos:['Carrega do banco.']},
-  trafego_subir:{t:'Tráfego (modelo)',area:'trafego',passos:['Carrega do banco.']},
-  manychat:{t:'ManyChat (modelo)',area:'tecnico',passos:['Carrega do banco.']},
-  amazon_marcas:{t:'Amazon (modelo)',area:'rotina',passos:['Carrega do banco.']},
-  campanha_disparo:{t:'Disparo (modelo)',area:'comercial',passos:['Carrega do banco.']},
-};
+let SOPS={};
 
-function seed(){
-  return [];
-}
+function seed(){return [];}
 let _id=1;
 function t(title,owner,due,cat,o={}){
   return {id:'t'+(_id++),title,owner,due,cat,status:o.status||'todo',
@@ -702,16 +693,49 @@ function t(title,owner,due,cat,o={}){
 }
 
 /* ----- CRM (mini-funil de vendas) ----- */
-/* Etapas do funil — EDITÁVEIS pelo time (S.stages). Padrão = fluxo real da Nati. */
+/* Etapas do funil — EDITÁVEIS pelo time (S.stages).
+   fase: 'sdr' (colunas da Mayara) · 'both' (Qualificado — a ponte, aparece pros dois) · 'closer' (colunas da Nati). */
 function seedStages(){return [
-  {id:'novo',l:'Novo lead',c:'#9E998D'},
-  {id:'diagnostico',l:'Diagnóstico',c:'#5AA6C9'},
-  {id:'dor',l:'Dor / escada do sim',c:'#5AA6C9'},
-  {id:'oferta',l:'Oferta enviada',c:'#E2A33C'},
-  {id:'followup',l:'Follow-up',c:'#C9A24B'},
-  {id:'aluno',l:'Virou aluno ✓',c:'#46B07C',won:true},
-  {id:'perdido',l:'Perdido',c:'#D9594C',lost:true},
+  {id:'novo',l:'Novo lead',c:'#9E998D',fase:'sdr'},
+  {id:'conversa',l:'Em conversa',c:'#B98BD6',fase:'sdr'},
+  {id:'aquecendo',l:'Aquecendo',c:'#E2A33C',fase:'sdr'},
+  {id:'qualificado',l:'Qualificado ✅',c:'#46B07C',fase:'both'},
+  {id:'diagnostico',l:'Diagnóstico',c:'#5AA6C9',fase:'closer'},
+  {id:'dor',l:'Dor / escada do sim',c:'#5AA6C9',fase:'closer'},
+  {id:'oferta',l:'Oferta enviada',c:'#E2A33C',fase:'closer'},
+  {id:'followup',l:'Follow-up',c:'#C9A24B',fase:'closer'},
+  {id:'aluno',l:'Virou aluno ✓',c:'#46B07C',won:true,fase:'closer'},
+  {id:'perdido',l:'Perdido',c:'#D9594C',lost:true,fase:'closer'},
 ];}
+/* Fase padrão por id (usada pra migrar configs antigas que não têm 'fase'). */
+const FASE_BY_ID={novo:'sdr',conversa:'sdr',aquecendo:'sdr',qualificado:'both',diagnostico:'closer',dor:'closer',oferta:'closer',followup:'closer',aluno:'closer',perdido:'closer'};
+/* Garante a estrutura SDR→Closer mesmo em bancos antigos (roda em memória; se um gestor entrar, sincroniza).
+   NÃO move nenhum lead — só marca a fase de cada etapa e insere as colunas novas (que nascem vazias). */
+function normalizeStages(){
+  let a=Array.isArray(S.stages)?S.stages:seedStages();
+  a.forEach(s=>{if(!s.fase)s.fase=FASE_BY_ID[s.id]||'closer'});
+  const has=id=>a.some(s=>s.id===id);
+  const inserts=[
+    {after:'novo',stage:{id:'conversa',l:'Em conversa',c:'#B98BD6',fase:'sdr'}},
+    {after:'conversa',stage:{id:'aquecendo',l:'Aquecendo',c:'#E2A33C',fase:'sdr'}},
+    {after:'aquecendo',stage:{id:'qualificado',l:'Qualificado ✅',c:'#46B07C',fase:'both'}},
+  ];
+  inserts.forEach(({after,stage})=>{
+    if(has(stage.id))return;
+    let idx=a.findIndex(s=>s.id===after);
+    if(idx<0)idx=Math.max(-1,a.findIndex(s=>s.fase!=='sdr')-1);
+    a.splice(idx+1,0,stage);
+  });
+  S.stages=a;
+}
+/* Quais colunas cada papel vê no pipeline. Mayara (SDR) vê as dela + a ponte;
+   Nati (Closer) vê a ponte + as dela; gestores/apoio veem tudo. */
+function stagesForRole(role){
+  const a=S.stages||[];
+  if(role==='mayara')return a.filter(s=>s.fase==='sdr'||s.fase==='both');
+  if(role==='nati')return a.filter(s=>s.fase!=='sdr');
+  return a;
+}
 function stageById(id){return (S.stages||[]).find(s=>s.id===id)||{l:'?',c:'#9E998D'}}
 function isTerminal(id){const s=stageById(id);return !!(s.won||s.lost)}
 function isWon(id){return !!stageById(id).won}
@@ -758,9 +782,7 @@ function seedLaunch(){
     ],
   };
 }
-function seedCofre(){
-  return [{f:'Acessos do time',l:'—',n:'Carrega do banco.'}];
-}
+function seedCofre(){return [];}
 
 let S=load();
 function money(n){return 'R$ '+Number(n||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}
@@ -818,7 +840,7 @@ const TABS=[
   {id:'hoje',  label:'Meu dia', short:'Dia', icon:'<path d="M3 12 12 4l9 8"/><path d="M5 10v10h14V10"/>'},
   {id:'tarefas',label:'Tarefas equipe', short:'Equipe', icon:'<rect x="3" y="4" width="5" height="16" rx="1"/><rect x="10" y="4" width="5" height="11" rx="1"/><rect x="17" y="4" width="4" height="16" rx="1"/>'},
   {id:'hubvrd',label:'Hub VRD', short:'Hub', icon:'<rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="5" rx="1.5"/><rect x="13" y="10" width="8" height="11" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/>', allow:['simoni','ana','mudrek','fernanda']},
-  {id:'vendas',label:'Vendas',icon:'<path d="M4 5h16l-6 7v5l-4 2v-7z"/>', allow:['ana','simoni','nati','fernanda','mudrek']},
+  {id:'vendas',label:'Vendas',icon:'<path d="M4 5h16l-6 7v5l-4 2v-7z"/>', allow:['ana','simoni','nati','mayara','fernanda','mudrek']},
   {id:'posvenda',label:'Pós-venda', short:'Pós', icon:'<circle cx="9" cy="8" r="3.5"/><path d="M3.5 20c0-3 2.5-5.5 5.5-5.5"/><path d="M14.5 13.5l2 2 4-4"/>', allow:['ana','simoni','nati','fernanda','mudrek']},
   {id:'depoimentos',label:'Depoimentos', short:'Vídeos', icon:'<rect x="2.5" y="6" width="13" height="12" rx="2"/><path d="M16 10l5-3v10l-5-3z"/>', allow:['mayara','ana','simoni']},
   {id:'amazon',label:'Projeto Amazon', short:'Amazon', icon:'<path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8.5"/>', allow:['simoni','mayara','ana']},
@@ -2192,9 +2214,7 @@ function vVendas(v){
   ({geral:vVendaGeral,pipeline:vVendaPipeline,mensagens:vVendaMensagens,documentos:vVendaDocs}[sub]||vVendaGeral)(v);
 }
 /* Biblioteca de mensagens prontas (copiar e colar) — baseada no processo da Nati */
-let MSGS=[
-  {cat:'Modelos de mensagem',items:[{t:'Modelos da Nati',m:'Carregam do banco.'}]},
-];
+let MSGS=[];
 function msgCard(title,text){
   const card=el('div','rsum');
   const head=el('div','rsum-h',`<div class="rsum-n">${esc(title)}</div>`);
@@ -2257,18 +2277,23 @@ function vVendaGeral(v){
   else v.appendChild(el('div','',`<div style="color:var(--faint);font-size:13px;padding:0 4px 8px">Nenhum follow-up marcado pra hoje. 👏</div>`));
 }
 function vVendaPipeline(v){
+  const role=S.current;
+  const cols=stagesForRole(role);
+  // aviso de papel — explica o handoff pra cada uma
+  if(role==='mayara')v.appendChild(el('div','note rolehint','👋 <b>Seu funil (SDR).</b> Você puxa conversa e qualifica. Quando o lead esquentar, arraste pra <b>Qualificado ✅</b> — de lá ele cai direto no pipeline da Nati.'));
+  else if(role==='nati')v.appendChild(el('div','note rolehint','🎯 <b>Seu funil (Closer).</b> Os leads chegam prontos na coluna <b>Qualificado ✅</b> (a Mayara passa). Puxe de lá e feche.'));
   v.appendChild(el('div','note pipehint',`Arraste o lead pela jornada — segure e arraste o card. Filtre por temperatura ou busque entre os ${S.leads.length} leads.`));
   const tools=el('div','pipetools');
   const editBtn=el('button','editstages','⚙️ Editar etapas — renomear · reordenar · adicionar');
   editBtn.onclick=openStageEditor;tools.appendChild(editBtn);
-  v.appendChild(tools);
+  if(['ana','simoni','nati'].includes(role))v.appendChild(tools);
   const board=el('div','kboard pipe');
   const shown={};const STEP=40;
   const draw=()=>{
     board.innerHTML='';
     const q=(S.pipeSearch||'').trim().toLowerCase();const tp=S.pipeTemp||'';
     const matchT=x=>!tp||(tp==='none'?!x.temperatura:x.temperatura===tp);
-    S.stages.forEach(s=>{
+    cols.forEach(s=>{
       const list=S.leads.filter(x=>x.stage===s.id&&matchT(x)&&(!q||(x.name||'').toLowerCase().includes(q)||(x.contact||'').toLowerCase().includes(q)));
       const cap=shown[s.id]||STEP;
       const c=el('div','kcol');c.dataset.drop=s.id;
@@ -2297,19 +2322,22 @@ function vVendaPipeline(v){
 const STAGE_COLORS=['#9E998D','#5AA6C9','#E2A33C','#C9A24B','#B98BD6','#46B07C','#D9594C','#E07A8A'];
 function openStageEditor(){drawStageEditor()}
 function drawStageEditor(){
+  const FASES=[['sdr','SDR · Mayara'],['both','Ponte · Qualificado'],['closer','Closer · Nati']];
   const rows=S.stages.map((s,i)=>`<div class="strow">
     <input class="sl" data-i="${i}" value="${esc(s.l)}">
+    <select class="sfase" data-i="${i}">${FASES.map(([v,t])=>`<option value="${v}"${(s.fase||'closer')===v?' selected':''}>${t}</option>`).join('')}</select>
     <div class="scolors" data-i="${i}">${STAGE_COLORS.map(c=>`<button class="sc${s.c===c?' on':''}" data-c="${c}" style="background:${c}"></button>`).join('')}</div>
     <button class="smv sup" data-i="${i}" title="Subir">↑</button>
     <button class="smv sdn" data-i="${i}" title="Descer">↓</button>
     <button class="smv sdel" data-i="${i}" title="Remover">✕</button>
   </div>`).join('');
   openSheet(`<h3>Editar etapas do funil</h3>
-    <div class="sub">Renomeie, mude a cor, reordene (↑ ↓) ou remova. O time mexe à vontade — não precisa de mim.</div>
+    <div class="sub">Renomeie, defina a <b>fase</b> (quem vê a coluna: SDR = Mayara · Ponte = Qualificado · Closer = Nati), mude a cor, reordene (↑ ↓) ou remova.</div>
     <div class="stageedit">${rows}</div>
     <button class="addfield" id="addStage">+ adicionar etapa</button>
     <button class="primary" id="stClose" style="margin-top:8px">Pronto</button>`);
   sheet.querySelectorAll('.sl').forEach(inp=>inp.onchange=()=>{S.stages[+inp.dataset.i].l=inp.value;save()});
+  sheet.querySelectorAll('.sfase').forEach(sel=>sel.onchange=()=>{S.stages[+sel.dataset.i].fase=sel.value;save()});
   sheet.querySelectorAll('.scolors .sc').forEach(b=>b.onclick=()=>{S.stages[+b.closest('.scolors').dataset.i].c=b.dataset.c;save();drawStageEditor()});
   sheet.querySelectorAll('.sup').forEach(b=>b.onclick=()=>{const i=+b.dataset.i,a=S.stages;if(i>0){const t=a[i-1];a[i-1]=a[i];a[i]=t;save();drawStageEditor()}});
   sheet.querySelectorAll('.sdn').forEach(b=>b.onclick=()=>{const i=+b.dataset.i,a=S.stages;if(i<a.length-1){const t=a[i+1];a[i+1]=a[i];a[i]=t;save();drawStageEditor()}});
@@ -2323,7 +2351,7 @@ function drawStageEditor(){
   });
   sheet.querySelector('#addStage').onclick=()=>{
     let idx=S.stages.findIndex(s=>s.won||s.lost);if(idx<0)idx=S.stages.length;
-    S.stages.splice(idx,0,{id:'st'+Date.now(),l:'Nova etapa',c:'#5AA6C9'});
+    S.stages.splice(idx,0,{id:'st'+Date.now(),l:'Nova etapa',c:'#5AA6C9',fase:'closer'});
     save();drawStageEditor();
   };
   sheet.querySelector('#stClose').onclick=()=>{closeSheet();render()};
@@ -2508,7 +2536,7 @@ function subscribeTasks(){
 /* ---- leads (pipeline) <-> banco ---- */
 function leadToRow(l){return {id:l.id,name:l.name,contact:l.contact,source:l.source,stage:l.stage,plano:l.plano||'—',tipo:l.tipo||'lead',temperatura:l.temperatura||'',canal:l.canal||'',historico:l.historico||'',condicao:l.condicao||'',last:d2n(l.last),next:d2n(l.next),note:l.note||'',owner:l.owner||'nati',comments:l.comments||[],campos:l.campos||[],updated_at:new Date().toISOString()}}
 function rowToLead(r){return {id:r.id,name:r.name,contact:r.contact,source:r.source,stage:r.stage,plano:r.plano||'—',tipo:r.tipo||'lead',temperatura:r.temperatura||'',canal:r.canal||'',historico:r.historico||'',condicao:r.condicao||'',last:r.last||null,next:r.next||null,note:r.note||'',owner:r.owner||'nati',comments:r.comments||[],campos:r.campos||[]}}
-const canWriteLeads=()=>!!(ME&&['ana','simoni','nati'].includes(ME.role));
+const canWriteLeads=()=>!!(ME&&['ana','simoni','nati','mayara'].includes(ME.role));
 async function loadLeads(){let all=[],from=0;const size=1000;while(from<30000){const {data,error}=await sb.from('leads').select('*').range(from,from+size-1);if(error){console.error('loadLeads',error);break}all=all.concat(data||[]);if(!data||data.length<size)break;from+=size}S.leads=all.map(rowToLead)}
 let _leadT=null;
 function queueLeadSync(){if(!ME||!canWriteLeads())return;clearTimeout(_leadT);_leadT=setTimeout(()=>{const rows=S.leads.map(leadToRow);if(rows.length)sb.from('leads').upsert(rows).then(({error})=>{if(error)console.error('leadsync',error)})},500)}
@@ -2559,6 +2587,7 @@ async function afterLogin(){
     }
     S.current=ME.role;
     await loadConfig();
+    normalizeStages();
     await seedContentIfEmpty();
     await loadContent();
     await loadTasks();
